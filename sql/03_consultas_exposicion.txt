@@ -1,0 +1,88 @@
+-- PoliTinder · nueve SELECT para exposición y pantalla Reportes.
+-- Este archivo es SQL ejecutable en Workbench aunque tenga extensión .txt.
+-- La app lee los bloques @report y sustituye variables por parámetros JDBC.
+USE politinder;
+SET @edad_min=18;
+SET @edad_max=25;
+SET @carrera=1; -- Software
+SET @facultad=1; -- Ingeniería de Sistemas
+SET @corte=NOW();
+
+-- @report 1 | Todas las facultades
+-- Pregunta: ¿Cuáles son todas las facultades registradas? SELECT sin WHERE.
+SELECT idFaculty AS ID, name AS Facultad FROM FACULTY;
+-- @end
+
+-- @report 2 | Todas las carreras
+-- Pregunta: ¿Cuáles son todas las carreras registradas? SELECT sin WHERE.
+SELECT idMajor AS ID, name AS Carrera, idFaculty AS Facultad_ID FROM MAJOR;
+-- @end
+
+-- @report 3 | Usuarios por intervalo de edad
+-- Pregunta: ¿Qué usuarios tienen entre las edades indicadas, inclusive?
+-- Una tabla, WHERE y ORDER BY. Primero aparecen las personas más jóvenes.
+SELECT idUser AS ID, name AS Usuario, bornDate AS Nacimiento,
+       TIMESTAMPDIFF(YEAR,bornDate,CURDATE()) AS Edad
+FROM `USER`
+WHERE TIMESTAMPDIFF(YEAR,bornDate,CURDATE()) BETWEEN @edad_min AND @edad_max
+ORDER BY bornDate DESC, name, idUser;
+-- @end
+
+-- @report 4 | Usuarios de una carrera · sin JOIN
+-- Pregunta: ¿Qué usuarios pertenecen a la carrera seleccionada?
+SELECT idUser AS ID, name AS Usuario, mail AS Correo, idMajor AS Carrera_ID
+FROM `USER` WHERE idMajor=@carrera ORDER BY name,idUser;
+-- @end
+
+-- @report 5 | Usuarios de una carrera · con JOIN
+-- Pregunta: ¿Qué usuarios pertenecen a una carrera y cómo se llama esta?
+SELECT u.idUser AS ID,u.name AS Usuario,u.mail AS Correo,m.name AS Carrera
+FROM `USER` u JOIN MAJOR m ON m.idMajor=u.idMajor
+WHERE m.idMajor=@carrera ORDER BY u.name,u.idUser;
+-- @end
+
+-- @report 6 | Usuarios de una facultad
+-- Pregunta: ¿Qué usuarios pertenecen a la facultad seleccionada?
+SELECT u.idUser AS ID,u.name AS Usuario,m.name AS Carrera,f.name AS Facultad
+FROM `USER` u JOIN MAJOR m ON m.idMajor=u.idMajor
+JOIN FACULTY f ON f.idFaculty=m.idFaculty
+WHERE f.idFaculty=@facultad ORDER BY m.name,u.name,u.idUser;
+-- @end
+
+-- @report 7 | Usuario de mayor edad y su carrera
+-- Pregunta: ¿Quién tiene el nacimiento más antiguo y cuál es su carrera?
+-- MIN y JOIN. Si hay empate exacto en el nacimiento, se muestran todos.
+SELECT u.idUser AS ID,u.name AS Usuario,u.bornDate AS Nacimiento,
+       TIMESTAMPDIFF(YEAR,u.bornDate,CURDATE()) AS Edad,m.name AS Carrera
+FROM `USER` u JOIN MAJOR m ON m.idMajor=u.idMajor
+JOIN (SELECT MIN(bornDate) AS fecha FROM `USER`) mayor ON u.bornDate=mayor.fecha
+ORDER BY u.name,u.idUser;
+-- @end
+
+-- @report 8 | Matches por facultad
+-- Pregunta: ¿Cuántos matches involucran estudiantes de cada facultad?
+-- COUNT DISTINCT evita contar dos veces la pareja en una misma facultad.
+-- Un match entre dos facultades cuenta en ambas: la suma puede exceder el total global.
+SELECT f.idFaculty AS ID,f.name AS Facultad,COUNT(DISTINCT pm.idPoliMatch) AS Matches
+FROM FACULTY f
+LEFT JOIN MAJOR m ON m.idFaculty=f.idFaculty
+LEFT JOIN `USER` u ON u.idMajor=m.idMajor
+LEFT JOIN `LIKE` l ON l.idUser1=u.idUser
+LEFT JOIN POLIMATCH pm ON pm.idLike1=l.idLike OR pm.idLike2=l.idLike
+GROUP BY f.idFaculty,f.name ORDER BY Matches DESC,f.name;
+-- @end
+
+-- @report 9 | PoliDates frente a matches
+-- Pregunta: ¿Cuántas citas de fecha pasada existen frente a los matches generados?
+-- Es una aproximación por fecha; el ER NO confirma asistencia.
+-- El porcentaje usa matches distintos con citas, no la cantidad de citas.
+-- Resultado inicial esperado: 6 | 5 | 3 | 50.00. Sin matches, porcentaje NULL.
+SELECT m.total AS Matches_generados,c.total AS PoliDates_fecha_pasada,
+       c.parejas AS Matches_con_cita_pasada,
+       ROUND(100.0*c.parejas/NULLIF(m.total,0),2) AS Porcentaje_matches_con_cita
+FROM (SELECT COUNT(*) AS total FROM POLIMATCH) m
+CROSS JOIN (
+    SELECT COUNT(*) AS total,COUNT(DISTINCT idPoliMatch) AS parejas
+    FROM POLIDATE WHERE dateOfPoliDate<=@corte
+) c;
+-- @end

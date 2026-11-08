@@ -1,0 +1,168 @@
+# PoliDate: aplicación Swing adaptable, reportes y consola SQL
+
+## 1. Objetivo y tecnologías
+
+Crear PoliDate con registro, perfiles, fotografías, likes recíprocos, matches, chat, citas, nueve reportes y consola SQL.
+
+- Java Swing y FlatLaf.
+- JDBC y MySQL Connector/J.
+- Dependencias `.jar` en `lib`, sin Maven.
+- Ejecución desde VS Code mediante Run Java.
+- Usar el MySQL instalado y permitir dos instancias con sesiones independientes.
+- Mantener las diez tablas y columnas del último ER.
+- Sin suscripciones, pagos, intereses ni planes Básico/Premium.
+
+**Configuración:** no añadir configuraciones redundantes de MySQL, Java o VS Code. Comprobar los valores efectivos y omitir declaraciones como `ENGINE`, `CHARSET` o `COLLATE` cuando sus valores predeterminados ya cubran lo necesario. No cambiar la configuración global del equipo. Las claves, restricciones e índices propios del proyecto sí se declararán.
+
+## 2. Ventana dinámica e interfaz
+
+La ventana inicial será **un rectángulo vertical centrado en el área útil del monitor**, calculado proporcionalmente, sin una resolución fija.
+
+**Dimensionamiento**
+
+- Detectar el monitor que contiene el cursor al iniciar; usar el principal si no puede determinarse.
+- Obtener su área disponible, descontando barra de tareas y otros espacios reservados.
+- Usar inicialmente el **85 % de la altura disponible**.
+- Calcular el ancho como el **65 % de esa altura**, sin superar el 90 % del ancho disponible.
+- Centrar la ventana dentro de esa área.
+- Trabajar con las coordenadas lógicas de Swing y respetar la escala del sistema.
+- Permitir redimensionar y maximizar. No imponer una relación de aspecto durante el redimensionamiento manual.
+- Si cambia la configuración de monitores, ajustar la posición cuando sea necesario para mantener accesible la ventana.
+
+**Adaptación del contenido**
+
+- Usar administradores de diseño; evitar coordenadas absolutas y `null layout`.
+- Sustituir la barra lateral permanente por una cabecera compacta con menú de navegación.
+- Apilar formularios y controles verticalmente cuando falte ancho.
+- Escalar las fotografías manteniendo su proporción.
+- Usar desplazamiento vertical en formularios y perfiles.
+- En reportes y consola, permitir desplazamiento horizontal de tablas, sin comprimir columnas hasta volverlas ilegibles.
+- Separar editor y resultados mediante un panel dividido verticalmente que el usuario pueda ajustar.
+
+Mantener fondo claro, acentos coral/rosa, tarjetas y fotografías grandes. Las pantallas serán Acceso, Registro, Descubrir, Matches, Chat, PoliDates, Mi perfil, Reportes y Consola SQL.
+
+## 3. Base de datos y funcionamiento
+
+**Modelo**
+
+Conservar `FACULTY`, `MAJOR`, `GENDER`, `USER`, `USERPHOTO`, `LIKE`, `POLIMATCH`, `CHAT`, `MESSAGE` y `POLIDATE`, con las columnas de tu ER aprobado.
+
+- IDs autoincrementales y claves foráneas.
+- Correo único y contraseña almacenada como hash PBKDF2 con sal.
+- Likes dirigidos únicos, sin likes hacia uno mismo.
+- Pareja de likes única en `POLIMATCH`, guardando `idLike1 < idLike2`.
+- Un chat por match mediante unicidad de `CHAT.idPoliMatch`.
+- Validar reciprocidad, participación en chats y foto principal en los servicios Java.
+- Fechas de nacimiento como `DATE`; fechas de mensajes, auditoría y citas como `DATETIME`.
+- Delimitar identificadores SQL que lo requieran, especialmente `LIKE`.
+
+**Perfiles y fotografías**
+
+Registro para mayores de edad con correo, contraseña, nombre, nacimiento, género, carrera y biografía. La facultad seleccionada filtrará las carreras. Cargar los catálogos académicos de la EPN, incluyendo ESFOT y excluyendo posgrados.
+
+Permitir editar el perfil y pausar su visibilidad. Admitir hasta seis fotografías JPEG/PNG de 5 MB por usuario, guardadas como archivos con rutas relativas. Mantener una principal y exigir una foto para aparecer en Descubrir.
+
+**Exploración, matches y chat**
+
+Excluir al propio usuario, perfiles pausados, perfiles sin foto y personas a quienes ya se dio like. Los filtros de edad/género y los perfiles pasados se mantendrán durante la sesión.
+
+Solo crear match cuando existan A → B y B → A. Guardar match y chat en una transacción, bloqueando los usuarios en orden de ID y evitando duplicados ante acciones simultáneas.
+
+Solo los participantes podrán consultar y enviar mensajes. Ordenar por fecha e ID y actualizar cada dos segundos mientras la pantalla correspondiente esté activa.
+
+**PoliDates**
+
+Permitir agendar lugar, fecha y hora futura desde un match. Mostrar el encuentro a ambos participantes. No incluir aceptación, rechazo, cancelación ni confirmación de asistencia.
+
+**Organización técnica**
+
+Separar modelos, vistas, servicios y acceso a datos. Usar consultas parametrizadas para las funciones y reportes de la aplicación, y `SwingWorker` para operaciones que puedan bloquear la interfaz.
+
+Mantener credenciales fuera del código, usar horario de Ecuador y detener actualizaciones al cerrar sesión.
+
+## 4. Reportes, consola y archivos SQL
+
+### Reportes integrados
+
+Cada reporte tendrá pregunta, filtros, botón Ejecutar, SQL utilizado y resultados reales en una tabla.
+
+| N.º | Reporte | Requisito |
+|---:|---|---|
+| 1 | Todas las facultades | SELECT simple, sin WHERE. |
+| 2 | Todas las carreras | SELECT simple, sin WHERE. |
+| 3 | Usuarios en un intervalo de edad | Una tabla, WHERE y ORDER BY; inicialmente 18–25 años. |
+| 4 | Usuarios de cierta carrera | Solo USER, WHERE por carrera y ORDER BY nombre. |
+| 5 | Usuarios y nombre de su carrera | JOIN USER–MAJOR y WHERE. |
+| 6 | Usuarios de cierta facultad | JOIN USER–MAJOR–FACULTY y WHERE. |
+| 7 | Usuario de mayor edad y carrera | MIN del nacimiento y JOIN; incluir empates. |
+| 8 | Matches por facultad | LEFT JOIN y COUNT DISTINCT; incluir facultades con cero. |
+| 9 | Citas de fecha pasada frente a matches | Agregaciones y fecha de corte editable. |
+
+En el reporte 8, cada match contará una vez por facultad participante. Si ambos usuarios pertenecen a la misma facultad, contará una sola vez.
+
+El reporte 9 mostrará total de matches, citas anteriores al corte, matches distintos con esas citas y porcentaje de matches con al menos una. Una fecha pasada será una aproximación a «concretada», sin confirmar asistencia. Sin matches, el porcentaje se mostrará como no aplicable.
+
+### Consola SQL
+
+- Editor libre para una sentencia por ejecución.
+- Botones Ejecutar, Limpiar y Cancelar.
+- Tabla con columnas dinámicas según el resultado.
+- Soporte para sentencias de consulta y modificación admitidas por MySQL y los permisos de la conexión.
+- Mostrar tablas cuando existan resultados; en otros casos, filas afectadas o confirmación.
+- Mostrar errores, duración y cantidad de filas.
+- Ejecutar en segundo plano mediante `Statement.execute`.
+- Mantener una conexión exclusiva para comandos de sesión y transacciones, separada de las operaciones de la aplicación.
+- Revertir transacciones pendientes al cerrar esa conexión.
+- Recargar los datos al regresar a una pantalla para reflejar modificaciones realizadas desde la consola.
+
+Las sentencias libres estarán sujetas a las restricciones de MySQL; no ejecutarán las validaciones que existan únicamente en los servicios Java.
+
+### Entregables de base
+
+| Archivo previsto | Contenido |
+|---|---|
+| `sql/01_ddl.sql` | Base, tablas, claves, restricciones e índices, omitiendo valores predeterminados redundantes. |
+| `sql/02_dml.sql` | Catálogos y datos ficticios relacionados. |
+| `sql/03_consultas_exposicion.txt` | Los nueve ejemplos, preguntas, SQL, parámetros y explicación. |
+
+El DDL no borrará bases existentes. El DML estará destinado a una base recién creada e incluirá:
+
+- 20 usuarios ficticios con credenciales documentadas.
+- 24 avatares locales asociados a 18 usuarios.
+- 16 likes: seis parejas recíprocas y cuatro pendientes.
+- Seis matches, seis chats y 24 mensajes; dos chats vacíos.
+- Ocho citas: cinco pasadas asociadas a tres matches y tres futuras.
+
+Las fechas serán relativas al momento de carga. El reporte inicial esperado será: **6 matches, 5 citas pasadas, 3 matches con citas pasadas y 50 %**.
+
+## 5. Pruebas y entrega
+
+**Interfaz adaptable**
+
+- Comprobar la apertura vertical y centrada en distintos tamaños de pantalla.
+- Probar escalas del sistema de 100 %, 125 %, 150 % y 200 %.
+- Verificar redimensionamiento, maximización y uso con varios monitores.
+- Confirmar que formularios, botones y navegación siguen accesibles.
+- Revisar tablas anchas, editor SQL y fotografías sin recortes indebidos.
+
+**Base y funciones**
+
+- Ejecutar DDL y DML en una base de pruebas independiente.
+- Verificar relaciones y cantidades.
+- Probar registro, acceso, edición y fotografías.
+- Confirmar que un like unilateral no crea chat.
+- Confirmar que la reciprocidad crea exactamente un match y un chat, incluso con acciones simultáneas.
+- Impedir mensajes de usuarios ajenos.
+- Agendar citas futuras y recuperar datos después de reiniciar.
+
+**Reportes y consola**
+
+- Comparar los nueve reportes con su ejecución SQL directa.
+- Probar filtros, resultados vacíos, empates y facultades sin matches.
+- Comprobar que varias citas no duplican el conteo de matches.
+- Probar consultas con diferentes columnas, NULL, modificaciones, errores, cancelación y pérdida de conexión.
+- Verificar independencia entre las transacciones de la consola y las de la aplicación.
+
+Entregar el proyecto ejecutable desde VS Code, bibliotecas, recursos, DDL, DML, TXT e instrucciones. Conservar intactos los archivos existentes y `sources/`.
+
+**Criterio de finalización:** completar el recorrido registro → likes recíprocos → match → chat → cita, ejecutar los nueve reportes y la consola SQL, y utilizar todas las pantallas en una ventana vertical adaptable al equipo.

@@ -1,0 +1,257 @@
+PoliTinder - Fotos de prueba
+Generadas con la skill imagegen y la herramienta integrada image_gen (sin CLI).
+20 fotografias de 5 adultos ficticios; 4 fotografias por persona.
+La foto 01 de cada persona se uso como referencia de identidad para sus fotos 02, 03 y 04.
+
+persona_01_Ana/01_perfil.png
+Use case: photorealistic-natural.
+Asset type: individual test profile photo for a fictional university dating application called PoliTinder. This is photo 1 of a coherent four-photo set of this person.
+Primary request: One realistic, natural portrait of a fictional 25-year-old adult Latina woman, medium warm olive skin, oval face, hazel-brown eyes, naturally thick eyebrows, shoulder-length dark brown wavy hair with a side part and faint freckles across her nose. This must depict a wholly fictional adult, not a real person or celebrity.
+Scene/backdrop: a softly blurred leafy pedestrian area near a university in Quito, with no readable signs or distinctive branding.
+Clothing: a simple cream cotton blouse, ordinary everyday clothes.
+Composition/framing: vertical 2:3 portrait, head and upper torso, face clearly visible and centered with comfortable space above the head, looking toward the camera, relaxed posture. Exactly one person.
+Lighting/style: soft natural daylight, believable smartphone photography, realistic pores, hair strands and fabric texture, friendly candid feel, no glamour retouching.
+Constraints: generate ONE single photograph, not a collage or contact sheet. No text, logos, watermark, border, UI, added people, excessive bokeh, or plastic skin. All subjects are clearly adults.
+
+----------------------------------------
+
+persona_01_Ana/02_cafeteria.png
+Use case: photorealistic-natural.
+Asset type: photo 2 of 4, individual profile gallery photograph for the PoliTinder university app.
+Input images: Image 1 is the identity reference for this wholly fictional adult (Ana), not a composition to copy.
+Primary request: Create a new believable photograph of exactly the SAME adult person as in Image 1 at a small cafe. Preserve their facial identity, eyes, nose, lips, hair color and texture, skin tone, age, and natural body proportions. The person is a fictional 25-year-old adult Latina woman, medium warm olive skin, oval face, hazel-brown eyes, naturally thick eyebrows, shoulder-length dark brown wavy hair with a side part and faint freckles across her nose.
+Scene: sitting at a wooden table beside a cafe window, warm softly blurred interior, no other people visible, no readable signs.
+Clothing: a casual light blue denim jacket over a plain white T-shirt.
+Composition: vertical 2:3 photo, medium waist-up shot, body turned slightly sideways while smiling naturally toward the camera, forearms resting comfortably on the table, hands relaxed and anatomically natural, a simple unbranded cup on the table.
+Style: natural window light, unretouched candid smartphone photo, real skin and fabric textures, a different occasion from the reference.
+Constraints: one single photo, not collage; one adult only; same identity as reference; no text, logos, watermark, border, UI or beauty-filter skin.
+
+----------------------------------------
+
+persona_01_Ana/03_aire_libre.png
+Use case: photorealistic-natural.
+Asset type: photo 3 of 4, individual profile gallery photograph for PoliTinder.
+Input images: Image 1 is the identity reference of the fictional adult Ana; do not copy the original pose or backdrop.
+Primary request: Generate a new realistic photograph of exactly the SAME adult person in Image 1 during an outdoor walk. Their facial features and identity must match the reference closely: preserve eyes, nose, lips, natural skin color, hair color and texture, age and body proportions. Subject is a fictional 25-year-old adult Latina woman, medium warm olive skin, oval face, hazel-brown eyes, naturally thick eyebrows, shoulder-length dark brown wavy hair with a side part and faint freckles across her nose.
+Scene: a quiet green park path with tall eucalyptus trees and soft afternoon light; no other people.
+Clothing: a plain dusty-pink sweatshirt and blue jeans.
+Composition/framing: vertical 2:3, a noticeably wider three-quarter portrait showing head to below the knees, casually standing mid-walk at a slight angle, looking back toward the camera with a relaxed natural smile, arms and hands relaxed. Leave some environmental context around the person; the face remains sharp and recognizable.
+Style: candid lifestyle smartphone photograph taken by a friend, believable natural light and real skin and fabric texture, not studio or fashion photography.
+Constraints: one single photograph; exactly one clearly adult person; retain reference identity; no collage, text, watermarks, branding, UI, sunglasses, hat or face-obscuring objects.
+
+----------------------------------------
+
+persona_01_Ana/04_casual.png
+Use case: photorealistic-natural.
+Asset type: photo 4 of 4, individual profile photograph for a fictional university dating application, PoliTinder.
+Input images: Image 1 is the identity reference, depicting the entirely fictional adult Ana.
+Primary request: A new photograph from a different day of exactly the SAME adult person as Image 1. Preserve their recognizable facial structure, eyes, nose, lips, skin tone, hair color and texture, age, and natural body proportions. Subject: a fictional 25-year-old adult Latina woman, medium warm olive skin, oval face, hazel-brown eyes, naturally thick eyebrows, shoulder-length dark brown wavy hair with a side part and faint freckles across her nose.
+Scene/backdrop: a quiet pedestrian street with warm plaster walls and softly blurred colonial architecture typical of Quito, late-afternoon daylight.
+Clothing: a simple dark green casual blouse and blue jeans.
+Composition/framing: vertical 2:3 medium portrait from the hips upward, person standing naturally with shoulders facing camera, head turned slightly, smiling as if a friend has just said something amusing; hands relaxed at sides. Distinct clothing, lighting and place from the reference photograph.
+Style/medium: realistic candid smartphone photography, natural pores and small skin imperfections, individual hair strands, natural fabric textures and believable light and shadows.
+Constraints: exactly one adult person, match the reference identity. ONE individual photo, no collage, no added people, no text, logo, watermark, frame, UI, beauty retouching or stylization.
+
+----------------------------------------
+
+persona_02_Mateo/01_perfil.png
+Use case: photorealistic-natural.
+Asset type: individual test profile photo for a fictional university dating application called PoliTinder. This is photo 1 of a coherent four-photo set of this person.
+Primary request: One realistic, natural portrait of a fictional 27-year-old adult Latino man, tan skin, slightly angular face, dark brown eyes, short dark curly hair, neatly trimmed short beard and a warm broad smile. This must depict a wholly fictional adult, not a real person or celebrity.
+Scene/backdrop: a softly blurred leafy pedestrian area near a university in Quito, with no readable signs or distinctive branding.
+Clothing: a simple forest-green T-shirt, ordinary everyday clothes.
+Composition/framing: vertical 2:3 portrait, head and upper torso, face clearly visible and centered with comfortable space above the head, looking toward the camera, relaxed posture. Exactly one person.
+Lighting/style: soft natural daylight, believable smartphone photography, realistic pores, hair strands and fabric texture, friendly candid feel, no glamour retouching.
+Constraints: generate ONE single photograph, not a collage or contact sheet. No text, logos, watermark, border, UI, added people, excessive bokeh, or plastic skin. All subjects are clearly adults.
+
+----------------------------------------
+
+persona_02_Mateo/02_cafeteria.png
+Use case: photorealistic-natural.
+Asset type: photo 2 of 4, individual profile gallery photograph for the PoliTinder university app.
+Input images: Image 1 is the identity reference for this wholly fictional adult (Mateo), not a composition to copy.
+Primary request: Create a new believable photograph of exactly the SAME adult person as in Image 1 at a small cafe. Preserve their facial identity, eyes, nose, lips, hair color and texture, skin tone, age, and natural body proportions. The person is a fictional 27-year-old adult Latino man, tan skin, slightly angular face, dark brown eyes, short dark curly hair, neatly trimmed short beard and a warm broad smile.
+Scene: sitting at a wooden table beside a cafe window, warm softly blurred interior, no other people visible, no readable signs.
+Clothing: a beige overshirt over a plain white T-shirt.
+Composition: vertical 2:3 photo, medium waist-up shot, body turned slightly sideways while smiling naturally toward the camera, forearms resting comfortably on the table, hands relaxed and anatomically natural, a simple unbranded cup on the table.
+Style: natural window light, unretouched candid smartphone photo, real skin and fabric textures, a different occasion from the reference.
+Constraints: one single photo, not collage; one adult only; same identity as reference; no text, logos, watermark, border, UI or beauty-filter skin.
+
+----------------------------------------
+
+persona_02_Mateo/03_aire_libre.png
+Use case: photorealistic-natural.
+Asset type: photo 3 of 4, individual profile gallery photograph for PoliTinder.
+Input images: Image 1 is the identity reference of the fictional adult Mateo; do not copy the original pose or backdrop.
+Primary request: Generate a new realistic photograph of exactly the SAME adult person in Image 1 during an outdoor walk. Their facial features and identity must match the reference closely: preserve eyes, nose, lips, natural skin color, hair color and texture, age and body proportions. Subject is a fictional 27-year-old adult Latino man, tan skin, slightly angular face, dark brown eyes, short dark curly hair, neatly trimmed short beard and a warm broad smile.
+Scene: a grassy overlook with softly visible Andean hills in the distance on an overcast day; no other people.
+Clothing: a charcoal lightweight outdoor jacket over a gray T-shirt and dark casual trousers.
+Composition/framing: vertical 2:3, a noticeably wider three-quarter portrait showing head to below the knees, casually standing mid-walk at a slight angle, looking back toward the camera with a relaxed natural smile, arms and hands relaxed. Leave some environmental context around the person; the face remains sharp and recognizable.
+Style: candid lifestyle smartphone photograph taken by a friend, believable natural light and real skin and fabric texture, not studio or fashion photography.
+Constraints: one single photograph; exactly one clearly adult person; retain reference identity; no collage, text, watermarks, branding, UI, sunglasses, hat or face-obscuring objects.
+
+----------------------------------------
+
+persona_02_Mateo/04_casual.png
+Use case: photorealistic-natural.
+Asset type: photo 4 of 4, individual profile photograph for a fictional university dating application, PoliTinder.
+Input images: Image 1 is the identity reference, depicting the entirely fictional adult Mateo.
+Primary request: A new photograph from a different day of exactly the SAME adult person as Image 1. Preserve their recognizable facial structure, eyes, nose, lips, skin tone, hair color and texture, age, and natural body proportions. Subject: a fictional 27-year-old adult Latino man, tan skin, slightly angular face, dark brown eyes, short dark curly hair, neatly trimmed short beard and a warm broad smile.
+Scene/backdrop: a sunlit courtyard with stone paving and simple plants, relaxed weekend atmosphere.
+Clothing: a light blue long-sleeved button-up shirt worn casually with sleeves rolled up and dark jeans.
+Composition/framing: vertical 2:3 medium portrait from the hips upward, person standing naturally with shoulders facing camera, head turned slightly, smiling as if a friend has just said something amusing; hands relaxed at sides. Distinct clothing, lighting and place from the reference photograph.
+Style/medium: realistic candid smartphone photography, natural pores and small skin imperfections, individual hair strands, natural fabric textures and believable light and shadows.
+Constraints: exactly one adult person, match the reference identity. ONE individual photo, no collage, no added people, no text, logo, watermark, frame, UI, beauty retouching or stylization.
+
+----------------------------------------
+
+persona_03_Camila/01_perfil.png
+Use case: photorealistic-natural.
+Asset type: individual test profile photo for a fictional university dating application called PoliTinder. This is photo 1 of a coherent four-photo set of this person.
+Primary request: One realistic, natural portrait of a fictional 26-year-old adult Afro-Latina woman, deep brown skin, rounded face, dark brown eyes, shoulder-length natural tight black curls, high cheekbones and a bright relaxed smile. This must depict a wholly fictional adult, not a real person or celebrity.
+Scene/backdrop: a softly blurred leafy pedestrian area near a university in Quito, with no readable signs or distinctive branding.
+Clothing: a simple terracotta cotton top, ordinary everyday clothes.
+Composition/framing: vertical 2:3 portrait, head and upper torso, face clearly visible and centered with comfortable space above the head, looking toward the camera, relaxed posture. Exactly one person.
+Lighting/style: soft natural daylight, believable smartphone photography, realistic pores, hair strands and fabric texture, friendly candid feel, no glamour retouching.
+Constraints: generate ONE single photograph, not a collage or contact sheet. No text, logos, watermark, border, UI, added people, excessive bokeh, or plastic skin. All subjects are clearly adults.
+
+----------------------------------------
+
+persona_03_Camila/02_cafeteria.png
+Use case: photorealistic-natural.
+Asset type: photo 2 of 4, individual profile gallery photograph for the PoliTinder university app.
+Input images: Image 1 is the identity reference for this wholly fictional adult (Camila), not a composition to copy.
+Primary request: Create a new believable photograph of exactly the SAME adult person as in Image 1 at a small cafe. Preserve their facial identity, eyes, nose, lips, hair color and texture, skin tone, age, and natural body proportions. The person is a fictional 26-year-old adult Afro-Latina woman, deep brown skin, rounded face, dark brown eyes, shoulder-length natural tight black curls, high cheekbones and a bright relaxed smile.
+Scene: sitting at a wooden table beside a cafe window, warm softly blurred interior, no other people visible, no readable signs.
+Clothing: a mustard yellow cardigan over a plain white top.
+Composition: vertical 2:3 photo, medium waist-up shot, body turned slightly sideways while smiling naturally toward the camera, forearms resting comfortably on the table, hands relaxed and anatomically natural, a simple unbranded cup on the table.
+Style: natural window light, unretouched candid smartphone photo, real skin and fabric textures, a different occasion from the reference.
+Constraints: one single photo, not collage; one adult only; same identity as reference; no text, logos, watermark, border, UI or beauty-filter skin.
+
+----------------------------------------
+
+persona_03_Camila/03_aire_libre.png
+Use case: photorealistic-natural.
+Asset type: photo 3 of 4, individual profile gallery photograph for PoliTinder.
+Input images: Image 1 is the identity reference of the fictional adult Camila; do not copy the original pose or backdrop.
+Primary request: Generate a new realistic photograph of exactly the SAME adult person in Image 1 during an outdoor walk. Their facial features and identity must match the reference closely: preserve eyes, nose, lips, natural skin color, hair color and texture, age and body proportions. Subject is a fictional 26-year-old adult Afro-Latina woman, deep brown skin, rounded face, dark brown eyes, shoulder-length natural tight black curls, high cheekbones and a bright relaxed smile.
+Scene: a pleasant garden walkway with flowering shrubs and warm late-afternoon light; no other people.
+Clothing: a plain teal casual T-shirt and blue jeans.
+Composition/framing: vertical 2:3, a noticeably wider three-quarter portrait showing head to below the knees, casually standing mid-walk at a slight angle, looking back toward the camera with a relaxed natural smile, arms and hands relaxed. Leave some environmental context around the person; the face remains sharp and recognizable.
+Style: candid lifestyle smartphone photograph taken by a friend, believable natural light and real skin and fabric texture, not studio or fashion photography.
+Constraints: one single photograph; exactly one clearly adult person; retain reference identity; no collage, text, watermarks, branding, UI, sunglasses, hat or face-obscuring objects.
+
+----------------------------------------
+
+persona_03_Camila/04_casual.png
+Use case: photorealistic-natural.
+Asset type: photo 4 of 4, individual profile photograph for a fictional university dating application, PoliTinder.
+Input images: Image 1 is the identity reference, depicting the entirely fictional adult Camila.
+Primary request: A new photograph from a different day of exactly the SAME adult person as Image 1. Preserve their recognizable facial structure, eyes, nose, lips, skin tone, hair color and texture, age, and natural body proportions. Subject: a fictional 26-year-old adult Afro-Latina woman, deep brown skin, rounded face, dark brown eyes, shoulder-length natural tight black curls, high cheekbones and a bright relaxed smile.
+Scene/backdrop: a quiet city terrace with a soft distant urban skyline and warm late-afternoon light.
+Clothing: a casual cream blouse and blue jeans.
+Composition/framing: vertical 2:3 medium portrait from the hips upward, person standing naturally with shoulders facing camera, head turned slightly, smiling as if a friend has just said something amusing; hands relaxed at sides. Distinct clothing, lighting and place from the reference photograph.
+Style/medium: realistic candid smartphone photography, natural pores and small skin imperfections, individual hair strands, natural fabric textures and believable light and shadows.
+Constraints: exactly one adult person, match the reference identity. ONE individual photo, no collage, no added people, no text, logo, watermark, frame, UI, beauty retouching or stylization.
+
+----------------------------------------
+
+persona_04_Daniel/01_perfil.png
+Use case: photorealistic-natural.
+Asset type: individual test profile photo for a fictional university dating application called PoliTinder. This is photo 1 of a coherent four-photo set of this person.
+Primary request: One realistic, natural portrait of a fictional 28-year-old adult man of East Asian and Latin American heritage, light warm skin, oval face, dark brown eyes, straight black hair neatly parted, clean-shaven, thin round dark eyeglasses and a gentle smile. This must depict a wholly fictional adult, not a real person or celebrity.
+Scene/backdrop: a softly blurred leafy pedestrian area near a university in Quito, with no readable signs or distinctive branding.
+Clothing: a simple navy blue casual shirt, ordinary everyday clothes.
+Composition/framing: vertical 2:3 portrait, head and upper torso, face clearly visible and centered with comfortable space above the head, looking toward the camera, relaxed posture. Exactly one person.
+Lighting/style: soft natural daylight, believable smartphone photography, realistic pores, hair strands and fabric texture, friendly candid feel, no glamour retouching.
+Constraints: generate ONE single photograph, not a collage or contact sheet. No text, logos, watermark, border, UI, added people, excessive bokeh, or plastic skin. All subjects are clearly adults.
+
+----------------------------------------
+
+persona_04_Daniel/02_cafeteria.png
+Use case: photorealistic-natural.
+Asset type: photo 2 of 4, individual profile gallery photograph for the PoliTinder university app.
+Input images: Image 1 is the identity reference for this wholly fictional adult (Daniel), not a composition to copy.
+Primary request: Create a new believable photograph of exactly the SAME adult person as in Image 1 at a small cafe. Preserve their facial identity, eyes, nose, lips, hair color and texture, skin tone, age, and natural body proportions. The person is a fictional 28-year-old adult man of East Asian and Latin American heritage, light warm skin, oval face, dark brown eyes, straight black hair neatly parted, clean-shaven, thin round dark eyeglasses and a gentle smile.
+Scene: sitting at a wooden table beside a cafe window, warm softly blurred interior, no other people visible, no readable signs.
+Clothing: a casual gray knit sweater, retaining the same round eyeglasses.
+Composition: vertical 2:3 photo, medium waist-up shot, body turned slightly sideways while smiling naturally toward the camera, forearms resting comfortably on the table, hands relaxed and anatomically natural, a simple unbranded cup on the table.
+Style: natural window light, unretouched candid smartphone photo, real skin and fabric textures, a different occasion from the reference.
+Constraints: one single photo, not collage; one adult only; same identity as reference; no text, logos, watermark, border, UI or beauty-filter skin.
+
+----------------------------------------
+
+persona_04_Daniel/03_aire_libre.png
+Use case: photorealistic-natural.
+Asset type: photo 3 of 4, individual profile gallery photograph for PoliTinder.
+Input images: Image 1 is the identity reference of the fictional adult Daniel; do not copy the original pose or backdrop.
+Primary request: Generate a new realistic photograph of exactly the SAME adult person in Image 1 during an outdoor walk. Their facial features and identity must match the reference closely: preserve eyes, nose, lips, natural skin color, hair color and texture, age and body proportions. Subject is a fictional 28-year-old adult man of East Asian and Latin American heritage, light warm skin, oval face, dark brown eyes, straight black hair neatly parted, clean-shaven, thin round dark eyeglasses and a gentle smile.
+Scene: a quiet park with a small wooden footbridge and leafy trees under soft daylight; no other people.
+Clothing: a simple olive green jacket over a cream T-shirt and blue jeans, retaining the same round eyeglasses.
+Composition/framing: vertical 2:3, a noticeably wider three-quarter portrait showing head to below the knees, casually standing mid-walk at a slight angle, looking back toward the camera with a relaxed natural smile, arms and hands relaxed. Leave some environmental context around the person; the face remains sharp and recognizable.
+Style: candid lifestyle smartphone photograph taken by a friend, believable natural light and real skin and fabric texture, not studio or fashion photography.
+Constraints: one single photograph; exactly one clearly adult person; retain reference identity; no collage, text, watermarks, branding, UI, sunglasses, hat or face-obscuring objects.
+
+----------------------------------------
+
+persona_04_Daniel/04_casual.png
+Use case: photorealistic-natural.
+Asset type: photo 4 of 4, individual profile photograph for a fictional university dating application, PoliTinder.
+Input images: Image 1 is the identity reference, depicting the entirely fictional adult Daniel.
+Primary request: A new photograph from a different day of exactly the SAME adult person as Image 1. Preserve their recognizable facial structure, eyes, nose, lips, skin tone, hair color and texture, age, and natural body proportions. Subject: a fictional 28-year-old adult man of East Asian and Latin American heritage, light warm skin, oval face, dark brown eyes, straight black hair neatly parted, clean-shaven, thin round dark eyeglasses and a gentle smile.
+Scene/backdrop: a bright library corner with out-of-focus bookshelves and window light, no legible book titles.
+Clothing: a plain burgundy long-sleeved shirt and dark jeans, retaining the same thin round eyeglasses.
+Composition/framing: vertical 2:3 medium portrait from the hips upward, person standing naturally with shoulders facing camera, head turned slightly, smiling as if a friend has just said something amusing; hands relaxed at sides. Distinct clothing, lighting and place from the reference photograph.
+Style/medium: realistic candid smartphone photography, natural pores and small skin imperfections, individual hair strands, natural fabric textures and believable light and shadows.
+Constraints: exactly one adult person, match the reference identity. ONE individual photo, no collage, no added people, no text, logo, watermark, frame, UI, beauty retouching or stylization.
+
+----------------------------------------
+
+persona_05_Valeria/01_perfil.png
+Use case: photorealistic-natural.
+Asset type: individual test profile photo for a fictional university dating application called PoliTinder. This is photo 1 of a coherent four-photo set of this person.
+Primary request: One realistic, natural portrait of a fictional 25-year-old adult Andean Latina woman, warm medium brown skin, almond-shaped dark brown eyes, broad cheekbones, straight long jet-black hair with a center part and a calm friendly smile. This must depict a wholly fictional adult, not a real person or celebrity.
+Scene/backdrop: a softly blurred leafy pedestrian area near a university in Quito, with no readable signs or distinctive branding.
+Clothing: a simple muted blue cotton blouse, ordinary everyday clothes.
+Composition/framing: vertical 2:3 portrait, head and upper torso, face clearly visible and centered with comfortable space above the head, looking toward the camera, relaxed posture. Exactly one person.
+Lighting/style: soft natural daylight, believable smartphone photography, realistic pores, hair strands and fabric texture, friendly candid feel, no glamour retouching.
+Constraints: generate ONE single photograph, not a collage or contact sheet. No text, logos, watermark, border, UI, added people, excessive bokeh, or plastic skin. All subjects are clearly adults.
+
+----------------------------------------
+
+persona_05_Valeria/02_cafeteria.png
+Use case: photorealistic-natural.
+Asset type: photo 2 of 4, individual profile gallery photograph for the PoliTinder university app.
+Input images: Image 1 is the identity reference for this wholly fictional adult (Valeria), not a composition to copy.
+Primary request: Create a new believable photograph of exactly the SAME adult person as in Image 1 at a small cafe. Preserve their facial identity, eyes, nose, lips, hair color and texture, skin tone, age, and natural body proportions. The person is a fictional 25-year-old adult Andean Latina woman, warm medium brown skin, almond-shaped dark brown eyes, broad cheekbones, straight long jet-black hair with a center part and a calm friendly smile.
+Scene: sitting at a wooden table beside a cafe window, warm softly blurred interior, no other people visible, no readable signs.
+Clothing: a rust-colored knitted sweater.
+Composition: vertical 2:3 photo, medium waist-up shot, body turned slightly sideways while smiling naturally toward the camera, forearms resting comfortably on the table, hands relaxed and anatomically natural, a simple unbranded cup on the table.
+Style: natural window light, unretouched candid smartphone photo, real skin and fabric textures, a different occasion from the reference.
+Constraints: one single photo, not collage; one adult only; same identity as reference; no text, logos, watermark, border, UI or beauty-filter skin.
+
+----------------------------------------
+
+persona_05_Valeria/03_aire_libre.png
+Use case: photorealistic-natural.
+Asset type: photo 3 of 4, individual profile gallery photograph for PoliTinder.
+Input images: Image 1 is the identity reference of the fictional adult Valeria; do not copy the original pose or backdrop.
+Primary request: Generate a new realistic photograph of exactly the SAME adult person in Image 1 during an outdoor walk. Their facial features and identity must match the reference closely: preserve eyes, nose, lips, natural skin color, hair color and texture, age and body proportions. Subject is a fictional 25-year-old adult Andean Latina woman, warm medium brown skin, almond-shaped dark brown eyes, broad cheekbones, straight long jet-black hair with a center part and a calm friendly smile.
+Scene: a broad walking path beside tall trees with distant hills and soft morning light; no other people.
+Clothing: a light beige jacket over a plain dark-green top and blue jeans.
+Composition/framing: vertical 2:3, a noticeably wider three-quarter portrait showing head to below the knees, casually standing mid-walk at a slight angle, looking back toward the camera with a relaxed natural smile, arms and hands relaxed. Leave some environmental context around the person; the face remains sharp and recognizable.
+Style: candid lifestyle smartphone photograph taken by a friend, believable natural light and real skin and fabric texture, not studio or fashion photography.
+Constraints: one single photograph; exactly one clearly adult person; retain reference identity; no collage, text, watermarks, branding, UI, sunglasses, hat or face-obscuring objects.
+
+----------------------------------------
+
+persona_05_Valeria/04_casual.png
+Use case: photorealistic-natural.
+Asset type: photo 4 of 4, individual profile photograph for a fictional university dating application, PoliTinder.
+Input images: Image 1 is the identity reference, depicting the entirely fictional adult Valeria.
+Primary request: A new photograph from a different day of exactly the SAME adult person as Image 1. Preserve their recognizable facial structure, eyes, nose, lips, skin tone, hair color and texture, age, and natural body proportions. Subject: a fictional 25-year-old adult Andean Latina woman, warm medium brown skin, almond-shaped dark brown eyes, broad cheekbones, straight long jet-black hair with a center part and a calm friendly smile.
+Scene/backdrop: a peaceful courtyard with a pale stucco wall and softly blurred greenery in warm daylight.
+Clothing: a simple lavender casual blouse and dark jeans.
+Composition/framing: vertical 2:3 medium portrait from the hips upward, person standing naturally with shoulders facing camera, head turned slightly, smiling as if a friend has just said something amusing; hands relaxed at sides. Distinct clothing, lighting and place from the reference photograph.
+Style/medium: realistic candid smartphone photography, natural pores and small skin imperfections, individual hair strands, natural fabric textures and believable light and shadows.
+Constraints: exactly one adult person, match the reference identity. ONE individual photo, no collage, no added people, no text, logo, watermark, frame, UI, beauty retouching or stylization.
