@@ -155,15 +155,23 @@ public final class PeopleService {
               + "WHERE u.idUser<>? AND u.status='ACTIVE' AND"
               + " TIMESTAMPDIFF(YEAR,u.bornDate,CURDATE()) BETWEEN ? AND ? AND (?=0 OR"
               + " u.idGender=?) AND EXISTS(SELECT 1 FROM USERPHOTO p WHERE p.idUser=u.idUser)"
-              + " AND NOT EXISTS(SELECT 1 FROM `LIKE` l WHERE l.idUser1=? AND"
-              + " l.idUser2=u.idUser) ORDER BY u.idUser",
+              + " AND NOT EXISTS(SELECT 1 FROM POLIMATCH pm"
+              + " JOIN `LIKE` a ON a.idLike=pm.idLike1 JOIN `LIKE` b ON b.idLike=pm.idLike2"
+              + " WHERE a.idUser1=b.idUser2 AND a.idUser2=b.idUser1"
+              + " AND ((a.idUser1=? AND a.idUser2=u.idUser)"
+              + " OR (a.idUser2=? AND a.idUser1=u.idUser)))",
           me,
           min,
           max,
           gender,
           gender,
+          me,
           me);
-      return list.stream().map(PeopleService::user).filter(u -> !skipped.contains(u.id())).toList();
+      var eligible = new ArrayList<>(list.stream().map(PeopleService::user).toList());
+      Collections.shuffle(eligible);
+      var unseen = eligible.stream().filter(u -> !skipped.contains(u.id())).toList();
+      // Una vuelta agotada empieza de nuevo; los likes guardados siguen siendo únicos.
+      return unseen.isEmpty() ? eligible : unseen;
     }
   }
 

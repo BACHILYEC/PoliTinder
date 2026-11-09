@@ -153,7 +153,7 @@ public final class ChatViews {
             for (Message msg : rows) {
               var bubble = Ui.column();
               bubble.setOpaque(true);
-              bubble.setBackground(msg.sender() == me ? new Color(255, 226, 233) : Color.WHITE);
+              bubble.setBackground(msg.sender() == me ? Ui.SOFT : Ui.SURFACE);
               bubble.setBorder(new EmptyBorder(10, 12, 10, 12));
               var text = new JTextArea(msg.content());
               text.setEditable(false);
@@ -263,6 +263,7 @@ public final class ChatViews {
     var date = new JTextField(LocalDateTime.now(ZONE).plusDays(1).withSecond(0).format(Ui.DATE));
     Ui.field(p, "Lugar", place);
     Ui.field(p, "Fecha y hora · AAAA-MM-DD HH:mm", date);
+    Ui.add(p, Ui.text("El horario debe estar libre para ambos participantes."));
     if (JOptionPane.showConfirmDialog(
             app, p, "PoliDate con " + match.name(), JOptionPane.OK_CANCEL_OPTION)
         != JOptionPane.OK_OPTION) return;

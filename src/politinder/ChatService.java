@@ -82,16 +82,37 @@ public final class ChatService {
   public void schedule(int me, int match, String place, LocalDateTime date) throws Exception {
     if (place.isBlank() || place.length() > 200)
       throw new IllegalArgumentException("Indica un lugar de hasta 200 caracteres.");
-    if (!date.isAfter(LocalDateTime.now(clock)))
+    if (date == null)
+      throw new IllegalArgumentException("Indica la fecha y hora de la cita.");
+    LocalDateTime slot = date.truncatedTo(java.time.temporal.ChronoUnit.MINUTES);
+    if (!slot.isAfter(LocalDateTime.now(clock)))
       throw new IllegalArgumentException("La cita debe tener fecha y hora futuras.");
     db.tx(
         c -> {
           member(c, me, match);
+          var pair = Db.rows(c,
+              "SELECT l.idUser1,l.idUser2 FROM POLIMATCH pm JOIN `LIKE` l"
+                  + " ON l.idLike=pm.idLike1 WHERE pm.idPoliMatch=?", match).getFirst();
+          int first = ((Number) pair.get("idUser1")).intValue();
+          int second = ((Number) pair.get("idUser2")).intValue();
+          // Bloquear ambos usuarios evita dos reservas simultáneas en matches diferentes.
+          // El orden fijo evita interbloqueos entre parejas que comparten participantes.
+          for (int participant : new int[] {Math.min(first, second), Math.max(first, second)})
+            Db.rows(c, "SELECT idUser FROM `USER` WHERE idUser=? FOR UPDATE", participant);
+          if (Db.number(c,
+                  "SELECT COUNT(*) FROM POLIDATE d JOIN POLIMATCH pm"
+                      + " ON pm.idPoliMatch=d.idPoliMatch JOIN `LIKE` l ON l.idLike=pm.idLike1"
+                      + " WHERE d.dateOfPoliDate>=? AND d.dateOfPoliDate<?"
+                      + " AND (l.idUser1 IN (?,?) OR l.idUser2 IN (?,?))",
+                  Timestamp.valueOf(slot), Timestamp.valueOf(slot.plusMinutes(1)),
+                  first, second, first, second) > 0)
+            throw new IllegalArgumentException(
+                "Tú o la otra persona ya tienen una PoliDate en esa fecha y hora. Elige otro horario.");
           Db.insert(
               c,
               "INSERT INTO POLIDATE (place,dateOfPoliDate,idPoliMatch) VALUES (?,?,?)",
               place.strip(),
-              Timestamp.valueOf(date),
+              Timestamp.valueOf(slot),
               match);
           return null;
         });

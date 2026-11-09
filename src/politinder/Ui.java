@@ -10,11 +10,50 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public final class Ui {
-  public static final Color CORAL = new Color(239, 73, 104),
-      INK = new Color(43, 37, 54),
-      MUTED = new Color(117, 110, 127),
-      BG = new Color(250, 247, 250);
+  public static final Color CORAL = new Color(217, 37, 85),
+      INK = new Color(32, 38, 62),
+      MUTED = new Color(97, 105, 124),
+      BG = new Color(245, 246, 250),
+      SURFACE = Color.WHITE,
+      LINE = new Color(221, 226, 236),
+      SOFT = new Color(252, 232, 237),
+      NAVY = new Color(37, 43, 72),
+      TEAL = new Color(20, 110, 104);
   public static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+  public static void installTheme() {
+    com.formdev.flatlaf.FlatLightLaf.setup();
+    UIManager.put("defaultFont", new Font(Font.SANS_SERIF, Font.PLAIN, 14));
+    UIManager.put("Component.arc", 16);
+    UIManager.put("Button.arc", 22);
+    UIManager.put("TextComponent.arc", 12);
+    UIManager.put("Component.focusColor", CORAL);
+    UIManager.put("Component.focusedBorderColor", CORAL);
+    UIManager.put("Component.borderColor", LINE);
+    UIManager.put("Panel.background", BG);
+    UIManager.put("Label.foreground", INK);
+    UIManager.put("Button.background", SURFACE);
+    UIManager.put("Button.foreground", INK);
+    UIManager.put("Button.hoverBackground", SOFT);
+    UIManager.put("Button.pressedBackground", new Color(248, 212, 223));
+    UIManager.put("Button.margin", new Insets(8, 14, 8, 14));
+    UIManager.put("ToggleButton.selectedBackground", SOFT);
+    UIManager.put("ToggleButton.selectedForeground", CORAL);
+    UIManager.put("TextField.foreground", INK);
+    UIManager.put("TextArea.foreground", INK);
+    UIManager.put("TextField.selectionBackground", SOFT);
+    UIManager.put("TextField.selectionForeground", INK);
+    UIManager.put("List.selectionBackground", SOFT);
+    UIManager.put("List.selectionForeground", INK);
+    UIManager.put("Table.selectionBackground", SOFT);
+    UIManager.put("Table.selectionForeground", INK);
+    UIManager.put("Table.alternateRowColor", new Color(249, 247, 251));
+    UIManager.put("TableHeader.background", NAVY);
+    UIManager.put("TableHeader.foreground", Color.WHITE);
+    UIManager.put("MenuItem.selectionBackground", SOFT);
+    UIManager.put("MenuItem.selectionForeground", INK);
+    UIManager.put("ScrollPane.smoothScrolling", true);
+  }
 
   private static final class Stack extends JPanel implements Scrollable {
     Stack() {
@@ -118,6 +157,7 @@ public final class Ui {
 
   public static JButton button(String text, Runnable action) {
     var b = new JButton(text);
+    b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     b.addActionListener(e -> action.run());
     return b;
   }
@@ -127,6 +167,8 @@ public final class Ui {
     b.setBackground(CORAL);
     b.setForeground(Color.WHITE);
     b.putClientProperty("JButton.buttonType", "roundRect");
+    b.putClientProperty("FlatLaf.style",
+        "hoverBackground: #C41E4A; pressedBackground: #A91C41; focusedBackground: #D92555");
     return b;
   }
 
@@ -148,6 +190,7 @@ public final class Ui {
   public static JScrollPane scroll(Component c) {
     var s = new JScrollPane(c);
     s.setBorder(null);
+    s.getViewport().setBackground(BG);
     s.getVerticalScrollBar().setUnitIncrement(18);
     s.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     return s;
@@ -193,6 +236,7 @@ public final class Ui {
   public static final class Portrait extends JComponent {
     private BufferedImage picture;
     private int generation;
+    private boolean loading;
 
     public Portrait() {
       setPreferredSize(new Dimension(300, 330));
@@ -200,6 +244,7 @@ public final class Ui {
 
     public void load(String path) {
       picture = null;
+      loading = path != null;
       repaint();
       int ticket = ++generation;
       if (path == null)
@@ -213,9 +258,14 @@ public final class Ui {
           try {
             if (generation == ticket) {
               picture = get();
+              loading = false;
               repaint();
             }
           } catch (Exception ignored) {
+            if (generation == ticket) {
+              loading = false;
+              repaint();
+            }
           }
         }
       }.execute();
@@ -227,21 +277,24 @@ public final class Ui {
       g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
       g.setPaint(
           new GradientPaint(
-              0, 0, new Color(255, 229, 234), getWidth(), getHeight(), new Color(226, 218, 242)));
+              0, 0, SOFT, getWidth(), getHeight(), new Color(230, 234, 246)));
       g.fillRoundRect(0, 0, getWidth(), getHeight(), 24, 24);
+      g.clip(new java.awt.geom.RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 24, 24));
       if (picture != null) {
-        double r = Math.min(
+        double r = Math.max(
             (double) getWidth() / picture.getWidth(),
             (double) getHeight() / picture.getHeight());
         int w = (int) (picture.getWidth() * r), h = (int) (picture.getHeight() * r);
         g.setRenderingHint(
             RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g.drawImage(picture, (getWidth() - w) / 2, (getHeight() - h) / 2, w, h, null);
+        g.drawImage(picture, (getWidth() - w) / 2, (int) ((getHeight() - h) * .20), w, h, null);
       } else {
-        g.setColor(new Color(188, 160, 184));
-        int s = Math.min(getWidth(), getHeight()) / 3;
-        g.fillOval((getWidth() - s) / 2, getHeight() / 4, s, s);
-        g.fillRoundRect(getWidth() / 4, getHeight() / 2, getWidth() / 2, getHeight() / 3, 60, 60);
+        g.setColor(MUTED);
+        g.setFont(UIManager.getFont("Label.font"));
+        String text = loading ? "Cargando foto…" : "Sin fotografía";
+        if (getWidth() >= 130)
+          g.drawString(text, (getWidth() - g.getFontMetrics().stringWidth(text)) / 2,
+              getHeight() / 2);
       }
       g.dispose();
     }

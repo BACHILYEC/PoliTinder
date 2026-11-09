@@ -23,6 +23,7 @@ public final class DiscoverView extends Ui.Screen {
   private User candidate;
   private List<Photo> photos = List.of();
   private int photoIndex;
+  private int loadTicket;
 
   public DiscoverView(AppFrame app) {
     super(app);
@@ -42,6 +43,7 @@ public final class DiscoverView extends Ui.Screen {
               app.minAge = (int) min.getValue();
               app.maxAge = (int) max.getValue();
               app.filterGender = ((Choice) gender.getSelectedItem()).id();
+              app.skipped.clear();
               load();
             }));
     var showFilters = new JToggleButton("Filtros");
@@ -107,12 +109,14 @@ public final class DiscoverView extends Ui.Screen {
   }
 
   private void load() {
+    int ticket = ++loadTicket;
     candidate = null;
     pass.setEnabled(false);
     like.setEnabled(false);
     int me = app.me.id();
     var skipped = Set.copyOf(app.skipped);
     int lo = app.minAge, hi = app.maxAge, g = app.filterGender;
+    int previous = app.lastDiscoveredUser;
     task(
         () -> {
           User own = app.people.get(me);
@@ -122,23 +126,39 @@ public final class DiscoverView extends Ui.Screen {
             throw new IllegalArgumentException("Añade una fotografía en Mi perfil para empezar.");
           var people = app.people.discover(me, lo, hi, g, skipped);
           if (people.isEmpty()) return null;
-          User u = people.getFirst();
+          User u = people.stream().filter(p -> p.id() != previous).findFirst()
+              .orElse(people.getFirst());
           return new Object[] {u, app.photos.list(u.id())};
         },
-        this::display);
+        data -> {
+          if (ticket == loadTicket) display(data);
+        },
+        e -> {
+          if (ticket == loadTicket) {
+            heading.setText("No se pudieron cargar los perfiles");
+            career.setText(Ui.error(e));
+            biography.setText("");
+            photos = List.of();
+            counter.setText("");
+            portrait.load(null);
+          }
+        });
   }
 
   @SuppressWarnings("unchecked")
   private void display(Object[] data) {
     if (data == null) {
-      heading.setText("Por ahora, eso es todo");
-      career.setText("Prueba otros filtros o vuelve más tarde.");
-      biography.setText("Los perfiles que pasaste volverán a aparecer en una nueva sesión.");
+      heading.setText("No hay perfiles con estos filtros");
+      career.setText("Prueba otro intervalo de edad o todos los géneros.");
+      biography.setText("Se muestran perfiles activos con foto. Tus matches están en Mis matches.");
+      photos = List.of();
       counter.setText("");
       portrait.load(null);
       return;
     }
     candidate = (User) data[0];
+    app.lastDiscoveredUser = candidate.id();
+    if (app.skipped.contains(candidate.id())) app.skipped.clear();
     photos = (List<Photo>) data[1];
     photoIndex = 0;
     picture(0);
@@ -176,7 +196,8 @@ public final class DiscoverView extends Ui.Screen {
     task(
         () -> app.people.like(me, other),
         result -> {
-          if (result.match())
+          app.skipped.add(other);
+          if (result.match() && !result.duplicate())
             JOptionPane.showMessageDialog(
                 app,
                 "¡Es un match con " + name + "!\nYa pueden conversar en Mis matches.",

@@ -12,14 +12,14 @@ public class UiSmokeTest {
   static AppFrame app;
 
   public static void main(String[] args) throws Exception {
+    Thread.setDefaultUncaughtExceptionHandler((thread, error) -> {
+      error.printStackTrace();
+      System.exit(1);
+    });
     Files.createDirectories(AppConfig.ROOT.resolve("test-output"));
     SwingUtilities.invokeAndWait(
         () -> {
-          FlatLightLaf.setup();
-          UIManager.put("defaultFont", new Font(Font.SANS_SERIF, Font.PLAIN, 14));
-          UIManager.put("Component.arc", 14);
-          UIManager.put("Button.arc", 18);
-          UIManager.put("TextComponent.arc", 12);
+          Ui.installTheme();
           app = new AppFrame();
           app.setBounds(50, 50, 430, 760);
           app.addNotify();
@@ -45,8 +45,12 @@ public class UiSmokeTest {
         });
     capture("02-acceso");
     var user = app.people.get(1);
-    SwingUtilities.invokeAndWait(() -> app.signedIn(user));
+    SwingUtilities.invokeAndWait(() -> {
+      app.maxAge = 40;
+      app.signedIn(user);
+    });
     capture("03-descubrir");
+    verifyDiscovery();
     SwingUtilities.invokeAndWait(() -> app.profile(false));
     capture("04-perfil");
     SwingUtilities.invokeAndWait(app::reports);
@@ -61,6 +65,10 @@ public class UiSmokeTest {
     var match = app.people.matches(1).getFirst();
     SwingUtilities.invokeAndWait(() -> app.chat(match));
     capture("07-chat");
+    SwingUtilities.invokeAndWait(app::dates);
+    capture("07b-polidates");
+    SwingUtilities.invokeAndWait(app::matches);
+    capture("07c-matches");
     SwingUtilities.invokeAndWait(
         () -> {
           app.setSize(320, 570);
@@ -77,8 +85,49 @@ public class UiSmokeTest {
         () ->
             app.dispatchEvent(
                 new java.awt.event.WindowEvent(app, java.awt.event.WindowEvent.WINDOW_CLOSING)));
-    System.out.println("Nueve pantallas renderizadas.");
+    System.out.println("Pantallas renderizadas; tres vueltas reales de Descubrir verificadas.");
     System.exit(0);
+  }
+
+  static JButton passButton(Container c) {
+    for (Component child : c.getComponents()) {
+      if (child instanceof JButton button && button.getText().contains("Pasar")) return button;
+      if (child instanceof Container nested) {
+        JButton found = passButton(nested);
+        if (found != null) return found;
+      }
+    }
+    return null;
+  }
+
+  static void verifyDiscovery() throws Exception {
+    var expected = new java.util.HashSet<>(app.people.discover(1, 18, 40, 0, java.util.Set.of())
+        .stream().map(Models.User::id).toList());
+    if (expected.size() < 2) throw new AssertionError("Faltan candidatos para probar el ciclo visual.");
+    int previous = 0;
+    for (int round = 0; round < 3; round++) {
+      var seen = new java.util.HashSet<Integer>();
+      for (int n = 0; n < expected.size(); n++) {
+        var ready = new java.util.concurrent.atomic.AtomicBoolean();
+        long deadline = System.nanoTime() + java.util.concurrent.TimeUnit.SECONDS.toNanos(8);
+        while (!ready.get() && System.nanoTime() < deadline) {
+          SwingUtilities.invokeAndWait(() -> {
+            JButton button = passButton(app.getContentPane());
+            ready.set(button != null && button.isEnabled());
+          });
+          if (!ready.get()) Thread.sleep(25);
+        }
+        if (!ready.get()) throw new AssertionError("Descubrir quedó bloqueado al cambiar de perfil.");
+        var current = new java.util.concurrent.atomic.AtomicInteger();
+        SwingUtilities.invokeAndWait(() -> current.set(app.lastDiscoveredUser));
+        if (!expected.contains(current.get()) || !seen.add(current.get()) || previous == current.get())
+          throw new AssertionError("Perfil repetido, match incluido o candidato incorrecto en Descubrir.");
+        previous = current.get();
+        SwingUtilities.invokeAndWait(() -> passButton(app.getContentPane()).doClick());
+      }
+      if (!seen.equals(expected)) throw new AssertionError("Una vuelta omitió candidatos.");
+    }
+    System.out.println("OK · UI: tres vueltas completas, sin repeticiones inmediatas ni matches.");
   }
 
   static void capture(String name) throws Exception {

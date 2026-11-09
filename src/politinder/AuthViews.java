@@ -63,6 +63,7 @@ public final class AuthViews {
               try (var c = app.db.open()) {
                 Db.number(c, "SELECT COUNT(*) FROM `USER`");
               }
+            if (!mode.equals("test")) DemoProfiles.refresh(app.db);
             app.config.save();
             return info;
           },
@@ -91,7 +92,7 @@ public final class AuthViews {
       Ui.add(p, Ui.text("Un café, una conversación, una nueva historia en la EPN."));
       var art = new Ui.Portrait();
       art.setPreferredSize(new Dimension(300, 190));
-      art.load("photos/demo/avatar-01.jpg");
+      art.load("photos/demo-real/01/01.png");
       Ui.add(p, art);
       var email = new JTextField();
       var password = new JPasswordField();

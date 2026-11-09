@@ -16,6 +16,7 @@ public final class AppFrame extends JFrame {
   public final ChatService chats = new ChatService(db);
   public User me;
   public final Set<Integer> skipped = new HashSet<>();
+  public int lastDiscoveredUser;
   public int minAge = 18, maxAge = 99, filterGender = 0;
   private final JPanel content = new JPanel(new BorderLayout());
   private Ui.Screen current;
@@ -27,13 +28,20 @@ public final class AppFrame extends JFrame {
     super("PoliTinder · EPN");
     setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
     var head = new JPanel(new BorderLayout(12, 0));
-    head.setBackground(Color.WHITE);
+    head.setBackground(Ui.NAVY);
     head.setBorder(new EmptyBorder(13, 20, 13, 20));
     var mark = Ui.label("PoliTinder", 24, true);
-    mark.setForeground(Ui.CORAL);
-    var brand = Ui.column();
-    brand.add(mark);
-    brand.add(section);
+    mark.setForeground(Color.WHITE);
+    section.setForeground(new Color(246, 201, 212));
+    menu.setBackground(new Color(55, 63, 94));
+    menu.setForeground(Color.WHITE);
+    menu.putClientProperty("FlatLaf.style",
+        "hoverBackground: #48516E; pressedBackground: #555E7D; borderWidth: 0");
+    menu.setToolTipText("Abrir menú");
+    var brand = new JPanel(new BorderLayout(0, 3));
+    brand.setOpaque(false);
+    brand.add(mark, BorderLayout.NORTH);
+    brand.add(section, BorderLayout.SOUTH);
     head.add(brand, BorderLayout.CENTER);
     head.add(menu, BorderLayout.EAST);
     menu.addActionListener(e -> navigation());
@@ -92,6 +100,7 @@ public final class AppFrame extends JFrame {
   public void signedIn(User user) {
     me = user;
     skipped.clear();
+    lastDiscoveredUser = 0;
     show(new DiscoverView(this), "DESCUBRIR");
   }
 
@@ -132,6 +141,7 @@ public final class AppFrame extends JFrame {
     me = null;
     skipped.clear();
     minAge = 18;
+    lastDiscoveredUser = 0;
     maxAge = 99;
     filterGender = 0;
     connected();

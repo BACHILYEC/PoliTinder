@@ -94,7 +94,7 @@ public class TestSuite {
               == 10,
           "DDL crea exactamente diez tablas");
       check(Db.number(c, "SELECT COUNT(*) FROM `USER`") == 20, "20 usuarios demo");
-      check(Db.number(c, "SELECT COUNT(*) FROM USERPHOTO") == 24, "24 fotos demo");
+      check(Db.number(c, "SELECT COUNT(*) FROM USERPHOTO") == 35, "35 fotos realistas demo");
       check(Db.number(c, "SELECT COUNT(*) FROM `LIKE`") == 16, "16 likes demo");
       check(Db.number(c, "SELECT COUNT(*) FROM MESSAGE") == 24, "24 mensajes demo");
       rejects(
@@ -176,7 +176,7 @@ public class TestSuite {
             2,
             2,
             "Biografía B");
-    Path picture = AppConfig.ROOT.resolve("photos/demo/avatar-01.jpg");
+    Path picture = AppConfig.ROOT.resolve("photos/demo-real/01/01.png");
     photos.add(a.id(), picture);
     photos.add(b.id(), picture);
     check(!people.like(a.id(), b.id()).match(), "Like unilateral no crea match");
@@ -273,6 +273,7 @@ public class TestSuite {
       check(
           running.get(5, TimeUnit.SECONDS), "Consola cancela consulta sin bloquear la aplicación");
     }
+    BugRegression.run(db);
     System.out.println(
         "La base de pruebas contiene datos QA añadidos; no se tocó el servidor principal.");
   }
