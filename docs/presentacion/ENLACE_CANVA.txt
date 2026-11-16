@@ -1,16 +1,13 @@
-PoliTinder - Presentación del proyecto
-Actualizada: 15 de noviembre de 2026
-10 diapositivas
+PoliTinder · Grupo G · Modelo de base de datos
+11 diapositivas. Actualizada el 15 de noviembre de 2026.
 
-Editar en Canva:
-https://www.canva.com/d/6aK2fd7SHh-CrYX
+Editar: https://www.canva.com/d/mkBfCF7dykiCWSh
+Ver: https://www.canva.com/d/pXSXhW8poIxQqOp
 
-Ver la presentación:
-https://www.canva.com/d/V3XBASxCbfhH6xB
+Incluye portada, integrantes, caso de estudio, entidades, atributos,
+MER V1 y mejorado, relaciones, reciprocidad, conexión, espacio de reportes
+y bibliografía con el libro y la declaración de uso de ChatGPT.
 
-Contenido: actividad de la organización ficticia, tecnologías, ER y entidades,
-relaciones, likes y matches, interfaz, reportes y consola SQL, explicación de
-los nueve SELECT solicitados y datos de prueba.
-
-La diapositiva final muestra interacciones de prueba y reglas de la aplicación.
-Se eliminó la descripción de archivos del proyecto.
+Guion: docs/GUION_EXPOSICION_GRUPO_G.md
+Las nueve queries definitivas están pendientes de recibir.
+No se generó PDF de esta presentación.

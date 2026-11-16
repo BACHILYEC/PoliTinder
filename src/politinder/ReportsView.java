@@ -40,6 +40,7 @@ public final class ReportsView extends Ui.Screen {
     run = Ui.primary("Ejecutar reporte", this::execute);
     run.setEnabled(false);
     Ui.add(top, run);
+    Ui.add(top, Ui.button("Recargar consultas", this::reloadReports));
     sql.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
     sql.setEditable(false);
     sql.setRows(7);
@@ -78,21 +79,39 @@ public final class ReportsView extends Ui.Screen {
     ProfileView.select(majors, 1);
     ProfileView.select(faculties, 1);
     for (var r : (java.util.List<Reports.Report>) data[0]) report.addItem(r);
-    run.setEnabled(true);
+    run.setEnabled(report.getItemCount() > 0);
     selected();
-    execute();
+  }
+
+  private void reloadReports() {
+    task(Reports::load, items -> {
+      report.removeAllItems();
+      for (var item : items) report.addItem(item);
+      run.setEnabled(!items.isEmpty());
+      selected();
+    });
   }
 
   private void selected() {
     var r = (Reports.Report) report.getSelectedItem();
-    if (r == null) return;
+    if (r == null) {
+      explanation.setText("Consultas pendientes: se incorporarán las nueve queries definitivas del grupo.");
+      sql.setText("");
+      ages.setVisible(false); majorFilter.setVisible(false);
+      facultyFilter.setVisible(false); timeFilter.setVisible(false);
+      table.setModel(new javax.swing.table.DefaultTableModel());
+      run.setEnabled(false);
+      status.setText("Sin reportes configurados");
+      revalidate();
+      return;
+    }
     explanation.setText(r.explanation());
     sql.setText(r.sql());
     sql.setCaretPosition(0);
-    ages.setVisible(r.id() == 3);
-    majorFilter.setVisible(r.id() == 4 || r.id() == 5);
-    facultyFilter.setVisible(r.id() == 6);
-    timeFilter.setVisible(r.id() == 9);
+    ages.setVisible(r.sql().contains("@edad_min") || r.sql().contains("@edad_max"));
+    majorFilter.setVisible(r.sql().contains("@carrera"));
+    facultyFilter.setVisible(r.sql().contains("@facultad"));
+    timeFilter.setVisible(r.sql().contains("@corte"));
     revalidate();
   }
 
@@ -100,7 +119,7 @@ public final class ReportsView extends Ui.Screen {
     var r = (Reports.Report) report.getSelectedItem();
     if (r == null) return;
     try {
-      if ((int) min.getValue() > (int) max.getValue())
+      if (ages.isVisible() && (int) min.getValue() > (int) max.getValue())
         throw new IllegalArgumentException("La edad mínima no puede superar la máxima.");
       Map<String, Object> args = new HashMap<>();
       args.put("edad_min", min.getValue());
@@ -109,7 +128,7 @@ public final class ReportsView extends Ui.Screen {
         args.put("carrera", ((Choice) majors.getSelectedItem()).id());
       if (faculties.getSelectedItem() != null)
         args.put("facultad", ((Choice) faculties.getSelectedItem()).id());
-      args.put("corte", Timestamp.valueOf(LocalDateTime.parse(cutoff.getText().strip(), Ui.DATE)));
+      if (timeFilter.isVisible()) args.put("corte", Timestamp.valueOf(LocalDateTime.parse(cutoff.getText().strip(), Ui.DATE)));
       run.setEnabled(false);
       report.setEnabled(false);
       long started = System.nanoTime();
