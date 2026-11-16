@@ -1,13 +1,6 @@
-PoliTinder · Grupo G · Modelo de base de datos
-11 diapositivas. Actualizada el 15 de noviembre de 2026.
+PoliTinder · Grupo G · 11 diapositivas
+https://www.canva.com/d/LBFpFgHmnzizJKo
 
-Editar: https://www.canva.com/d/mkBfCF7dykiCWSh
-Ver: https://www.canva.com/d/pXSXhW8poIxQqOp
-
-Incluye portada, integrantes, caso de estudio, entidades, atributos,
-MER V1 y mejorado, relaciones, reciprocidad, conexión, espacio de reportes
-y bibliografía con el libro y la declaración de uso de ChatGPT.
-
+Presentación actualizada con las once entidades y los tres diagramas aportados.
 Guion: docs/GUION_EXPOSICION_GRUPO_G.md
-Las nueve queries definitivas están pendientes de recibir.
-No se generó PDF de esta presentación.
+No se genera PDF.

@@ -33,56 +33,16 @@ public final class Installer {
           st.execute(sql);
         }
     }
-    seed(db);
   }
 
-  public static void seed(Db db) throws Exception {
+  public static void migrate(Db db) throws Exception {
     try (var c = db.open()) {
-      // Todas las tablas deben estar vacías: nunca reemplazar datos existentes.
-      for (String table : new String[] {
-          "FACULTY",
-          "MAJOR",
-          "GENDER",
-          "USER",
-          "USERPHOTO",
-          "LIKE",
-          "POLIMATCH",
-          "CHAT",
-          "MESSAGE",
-          "POLIDATE"
-      })
-        if (Db.number(c, "SELECT COUNT(*) FROM `" + table + "`") != 0)
-          throw new IllegalArgumentException("La carga demo requiere tablas vacías.");
-      c.setAutoCommit(false);
+      if (Db.number(c, "SELECT GET_LOCK('politinder_schema',10)") != 1)
+        throw new IllegalStateException("Otra instancia está actualizando la base.");
       try {
-        for (String sql : SqlScripts.split(Files.readString(AppConfig.ROOT.resolve("sql/02_dml.sql")))) {
-          if (sql.equalsIgnoreCase("START TRANSACTION") || sql.equalsIgnoreCase("COMMIT"))
-            continue;
-          try (var st = c.createStatement()) {
-            st.execute(sql);
-          }
-        }
-        c.commit();
-      } catch (Exception e) {
-        c.rollback();
-        throw e;
-      }
+        for (String sql : SqlScripts.split(Files.readString(AppConfig.ROOT.resolve("sql/02_actualizar_base.sql"))))
+          try (var st = c.createStatement()) { st.execute(sql); }
+      } finally { Db.number(c, "SELECT RELEASE_LOCK('politinder_schema')"); }
     }
-  }
-
-  /** Ampliación explícita y repetible; conserva cuentas, claves y conversaciones existentes. */
-  public static void expandDemo(Db db) throws Exception {
-    // Verificar los archivos antes de insertar rutas en la base.
-    for (var profile : DemoProfiles.PROFILES)
-      for (int n = 1; n <= 2; n++)
-        if (!Files.isRegularFile(AppConfig.resolve(profile.photo(n))))
-          throw new IllegalStateException("Falta la fotografía " + profile.photo(n));
-    db.tx(c -> {
-      for (String sql : SqlScripts.split(Files.readString(AppConfig.ROOT.resolve("sql/04_ampliar_demo.sql")))) {
-        if (sql.equalsIgnoreCase("START TRANSACTION") || sql.equalsIgnoreCase("COMMIT")) continue;
-        try (var st = c.createStatement()) { st.execute(sql); }
-      }
-      return null;
-    });
   }
 }

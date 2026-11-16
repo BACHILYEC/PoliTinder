@@ -91,8 +91,8 @@ public class TestSuite {
           Db.number(
                   c,
                   "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='politinder'")
-              == 10,
-          "DDL crea exactamente diez tablas");
+              == 11,
+          "DDL crea exactamente once tablas");
       check(Db.number(c, "SELECT COUNT(*) FROM `USER`") == 30, "30 usuarios demo");
       check(Db.number(c, "SELECT COUNT(*) FROM USERPHOTO") == 70, "70 fotos realistas demo");
       check(Db.number(c, "SELECT COUNT(*) FROM `LIKE`") == 16, "16 likes demo");
@@ -121,20 +121,10 @@ public class TestSuite {
     for (var r : Reports.load()) {
       var t = Reports.run(db, r, params);
       check(!t.rows().isEmpty(), "Reporte " + r.id() + " ejecuta y devuelve datos");
-      if (r.id() == 7) check(t.rows().size() == 2, "Reporte 7 conserva empate de mayor edad");
-      if (r.id() == 8)
-        check(
-            t.rows().stream().anyMatch(x -> ((Number) x.get(2)).longValue() == 0),
-            "Facultades sin matches aparecen con cero");
-      if (r.id() == 9) {
-        var row = t.rows().getFirst();
-        check(
-            ((Number) row.get(0)).intValue() == 6
-                && ((Number) row.get(1)).intValue() == 5
-                && ((Number) row.get(2)).intValue() == 3
-                && ((Number) row.get(3)).doubleValue() == 50,
-            "Reporte 9: 6 / 5 / 3 / 50%");
-      }
+      if (r.id() == 7) check(t.rows().size() == 9, "Nueve facultades con carreras");
+      if (r.id() == 9) check(t.rows().stream().filter(x -> x.get(0).equals("Software"))
+          .anyMatch(x -> ((Number)x.get(1)).intValue()==2), "Un match se cuenta una vez por carrera");
+
     }
     check(
         people.login("ana@politinder.test", "PoliDemo25!".toCharArray()).id() == 1,
@@ -151,6 +141,7 @@ public class TestSuite {
                 LocalDate.of(2000, 1, 1),
                 1,
                 1,
+            1,
                 ""),
         "Correo duplicado rechazado");
     rejects(() -> chat.messages(5, 1), "Usuario ajeno no lee chat");
@@ -166,6 +157,7 @@ public class TestSuite {
             LocalDate.of(2000, 1, 1),
             1,
             1,
+            1,
             "Biografía A");
     User b =
         people.register(
@@ -175,6 +167,7 @@ public class TestSuite {
             LocalDate.of(2001, 1, 1),
             2,
             2,
+            1,
             "Biografía B");
     Path picture = AppConfig.ROOT.resolve("photos/demo-real/01/01.png");
     photos.add(a.id(), picture);
@@ -221,7 +214,7 @@ public class TestSuite {
         photos.list(a.id()).stream().filter(Photo::main).count() == 1,
         "Una única portada ante cambios concurrentes");
     people.save(
-        a.id(), a.name(), a.mail(), a.bornDate(), a.gender(), a.major(), a.biography(), false);
+        a.id(), a.name(), a.mail(), a.bornDate(), a.gender(), a.major(), a.orientation(), a.biography(), false);
     check(
         people.discover(12, 18, 99, 0, Set.of()).stream().noneMatch(u -> u.id() == a.id()),
         "Perfil pausado excluido de Descubrir");

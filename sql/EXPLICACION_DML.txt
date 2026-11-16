@@ -1,124 +1,36 @@
-POLITINDER - CÓMO SE INSERTAN LOS DATOS
+POLITINDER: ESTRUCTURA Y DATOS EN UN SOLO SCRIPT
 
-ARCHIVOS Y ORDEN
-01_ddl.sql crea la base y sus diez tablas. Se ejecuta una vez en una base nueva.
-02_dml.sql carga los catálogos y los datos iniciales en tablas vacías. Incluye
-30 usuarios, 70 fotos, 16 likes, 6 matches, 6 chats, 24 mensajes y 8 PoliDates.
-03_reportes.sql contiene las nueve consultas de la pantalla Reportes.
-04_ampliar_demo.sql amplía una base existente sin borrarla. No vuelvas a ejecutar
-el DML inicial sobre una base poblada: los IDs y correos únicos ya existirían.
+01_ddl.sql contiene dos partes: CREATE DATABASE/CREATE TABLE (DDL) e INSERT (DML).
+Se ejecuta UNA VEZ para crear una base nueva. No se concatena el antiguo ampliador
+porque duplicaría los usuarios 21–30: la carga inicial ya contiene los 30 completos.
 
-FORMA GENERAL
-INSERT INTO tabla (columna1,columna2) VALUES (valor1,valor2);
-Cada valor corresponde a la columna de la misma posición. El DML enumera las
-columnas explícitamente. Los textos y las fechas literales llevan comillas
-simples; los números, TRUE/FALSE y las llamadas a funciones no llevan comillas.
-Para escribir una comilla dentro de un texto SQL se duplica: 'D''Angelo'.
-Las comillas invertidas identifican tablas o columnas: `LIKE` es además una
-palabra reservada. No confundirlas con las comillas de los valores de texto.
+ORDEN: catálogos FACULTY, MAJOR, GENDER y SEXUALORIENTATION; USER; USERPHOTO;
+LIKE; POLIMATCH; CHAT; MESSAGE; POLIDATE. Las FK requieren que existan primero
+las filas referenciadas. Las inserciones usan listas explícitas de columnas.
 
-1. FACULTY
-Inserta idFaculty y name. Los nueve identificadores fijos permiten que MAJOR
-se refiera a la facultad correcta. Las facultades se insertan antes de carreras.
-Ejemplo: INSERT INTO FACULTY (idFaculty,name) VALUES (1,'Ingeniería de Sistemas');
+USER: un INSERT por persona, con correo, hash PBKDF2, biografía y nombre ficticios.
+bornDate usa DATE_SUB(DATE_SUB(CURDATE(),INTERVAL años YEAR),INTERVAL días DAY).
+La resta adicional de días cambia el mes/día y evita cumpleaños iguales.
+creationDate = NOW() menos (200 + id*4) días; updateDate = NOW() menos id*2 días.
+La creación siempre precede a la actualización. Hay 30 valores diferentes de cada fecha.
+La orientación inicial es «Prefiero no indicarlo»; la persona la cambia en Perfil.
 
-2. MAJOR
-Inserta idMajor, name e idFaculty. El último valor es una clave foránea, no el
-nombre de la facultad. El catálogo contiene 28 carreras.
-Ejemplo: INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (1,'Software',1);
+USERPHOTO guarda 70 rutas existentes, no los bytes de las imágenes. Cinco perfiles
+tienen cuatro fotos y los otros veinticinco dos. isProfilePhoto identifica la portada.
 
-3. GENDER
-Inserta idGender y genderType. Un solo INSERT puede incluir varias tuplas,
-separadas por comas. Cada paréntesis crea una fila, no una columna.
+LIKE almacena emisor y receptor. POLIMATCH referencia dos likes opuestos.
+CHAT referencia el match. MESSAGE usa DATE_SUB anidados para distribuir 24 mensajes
+en días y minutos distintos. sender referencia al usuario que escribe.
 
-4. USER
-Cada fila inserta idUser, status, mail, password, biography, name, bornDate,
-idGender e idMajor. El correo es único; ACTIVE y PAUSED son los estados admitidos.
-creationDate y updateDate se omiten porque MySQL les asigna CURRENT_TIMESTAMP(6).
-updateDate cambia automáticamente cuando se modifica la fila.
+POLIDATE incluye ocho valores explícitos de fecha/hora, distribuidos entre varios
+meses de 2026 y 2027. Son datos de demostración, no evidencia de asistencia.
+NOW() y CURDATE() se evalúan al ejecutar; las fechas explícitas no cambian.
+SET time_zone='-05:00' hace coherente la carga con America/Guayaquil.
 
-bornDate usa DATE_SUB(CURDATE(),INTERVAL n YEAR). Por ejemplo:
-  DATE_SUB(CURDATE(),INTERVAL 22 YEAR)
-CURDATE() devuelve la fecha actual de la sesión, sin hora. DATE_SUB resta 22
-años: si se ejecuta el 14 de noviembre de 2026, almacena 2004-11-14. Se almacena
-el resultado de la función, no el texto DATE_SUB(...). La edad no se almacena;
-los reportes la calculan mediante TIMESTAMPDIFF(YEAR,bornDate,CURDATE()).
-Este mecanismo da edades conocidas al cargar la demo. Para personas reales,
-la app guarda la fecha de nacimiento que la persona ingresa.
+START TRANSACTION / COMMIT agrupan las inserciones. El DDL de MySQL no se revierte
+con esa transacción. No se borra ni reemplaza automáticamente una base existente.
 
-password contiene un hash PBKDF2-HMAC-SHA256 calculado antes de crear el archivo.
-No es una función de MySQL ni una contraseña en texto plano. El formato es:
-  pbkdf2$600000$sal_en_base64$hash_en_base64
-600000 es el número de iteraciones. Cada cuenta tiene una sal aleatoria propia,
-por eso dos hashes pueden ser distintos aunque la contraseña sea PoliDemo25!.
-La app calcula y compara el hash para iniciar sesión. No se puede descifrar.
-
-5. USERPHOTO
-Inserta idUserPhoto, pathPhoto, isProfilePhoto e idUser. pathPhoto es una ruta
-relativa al proyecto, por ejemplo photos/demo-real/21/01.png. MySQL guarda la
-ruta; la imagen está en esa carpeta del disco. Copia también photos al mover
-el proyecto a otra PC. TRUE/1 significa foto principal; FALSE/0, foto secundaria.
-Hay cinco perfiles con cuatro fotos y veinticinco con dos: 5*4+25*2=70.
-Cada perfil demo tiene exactamente una foto principal. pathPhoto es único.
-
-6. LIKE
-Inserta idLike, idUser1 e idUser2. idUser1 envía el like; idUser2 lo recibe.
-(1,1,2) significa que el like 1 va del usuario 1 al 2.
-(2,2,1) significa que el like 2 va del usuario 2 al 1.
-UNIQUE impide repetir una dirección y CHECK impide darse like a uno mismo.
-Un solo like no constituye un match.
-
-7. POLIMATCH
-Inserta idPoliMatch, idLike1 e idLike2 después de insertar los likes.
-(1,1,2) crea el match 1 con los likes recíprocos 1 y 2. El menor identificador
-de like va primero por el CHECK idLike1<idLike2. La app verifica la reciprocidad;
-las claves foráneas por sí solas solo verifican que ambos likes existan.
-
-8. CHAT
-Inserta idChat e idPoliMatch. La clave foránea exige un match existente y UNIQUE
-impide crear dos chats para el mismo match. La app crea match y chat juntos.
-
-9. MESSAGE
-Inserta idMessage, sendDate, content, idChat y sender. sender es el idUser del
-emisor, no su nombre. Los mensajes iniciales alternan entre los dos participantes.
-DATE_SUB(NOW(),INTERVAL 120 MINUTE) guarda una fecha y hora de hace 120 minutos.
-NOW() incluye hora, minutos y segundos; CURDATE() solo contiene la fecha.
-Los intervalos 120,115,110,... simulan una conversación con mensajes separados
-por cinco minutos. Para mensajes reales se utiliza el momento del envío.
-
-10. POLIDATE
-Inserta idPoliDate, place, dateOfPoliDate e idPoliMatch.
-DATE_SUB(NOW(),INTERVAL 1 DAY) genera una cita pasada para el reporte.
-DATE_ADD(NOW(),INTERVAL 6 DAY) genera una cita futura para probar la agenda.
-INTERVAL consta de una cantidad y una unidad: YEAR, DAY o MINUTE, entre otras.
-El esquema no tiene asistencia ni estado de cita: una fecha pasada no prueba
-que la cita se haya realizado. El reporte lo presenta como aproximación.
-
-TRANSACCIÓN Y ZONA HORARIA
-USE politinder selecciona la base. SET time_zone='-05:00' hace que las funciones
-de fecha y hora usen la hora de Ecuador continental en esta sesión.
-START TRANSACTION inicia la carga y COMMIT confirma los INSERT. La app ejecuta
-todo en una transacción y hace ROLLBACK si una sentencia falla. En Workbench,
-detén el script al primer error y ejecuta ROLLBACK; no continúes hasta COMMIT
-tras un error, ya que MySQL no revierte automáticamente toda la transacción.
-El DDL tiene confirmaciones implícitas y se ejecuta antes de esta transacción.
-
-AMPLIACIÓN DE UNA BASE EXISTENTE
-04_ampliar_demo.sql usa INSERT ... SELECT ... WHERE NOT EXISTS. SELECT produce
-la fila a insertar solo si el correo no está registrado. Omite idUser para que
-AUTO_INCREMENT asigne un ID libre, incluso si tus usuarios ocuparon IDs 21..30.
-Las fotos localizan al propietario por mail, no por el ID que tuvo en la demo.
-COUNT(*) comprueba cuántas fotos tiene; solo se añaden si tiene menos de dos.
-NOT EXISTS comprueba que no se repita una ruta. Otra expresión NOT EXISTS en
-la lista del SELECT devuelve 1 si falta foto principal y 0 si ya existe.
-Eso permite asignar isProfilePhoto sin convertir todas las fotos en principales.
-No se borran usuarios, mensajes ni fotos. No se cambian claves existentes.
-Si una cuenta personal tiene menos de dos fotos, sube sus fotos desde Mi perfil;
-la ampliación solo añade fotografías ficticias a las cuentas demo conocidas.
-
-VALORES PREDETERMINADOS
-El DDL usa los valores predeterminados del servidor para InnoDB y utf8mb4.
-La app comprueba estos valores al crear la base. No se cambian opciones globales.
-La ampliación presupone que los catálogos de carreras y géneros originales
-siguen presentes. Una clave foránea ausente produce un error, no una inserción
-silenciosa con datos incompletos.
+02_actualizar_base.sql es una migración separada y repetible para una base existente:
+crea el catálogo, añade la columna si falta y su FK. PREPARE/EXECUTE permite elegir
+ALTER TABLE solo cuando information_schema indica que falta la definición.
+Conserva cuentas, claves, fotos, mensajes y fechas históricas. No recarga la demo.

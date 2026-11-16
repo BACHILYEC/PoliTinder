@@ -28,7 +28,7 @@ public final class BugRegression {
     User[] users = new User[5];
     for (int i = 0; i < users.length; i++) {
       users[i] = people.register("QA Agenda " + i, UUID.randomUUID() + "@example.test",
-          "Pruebas25!".toCharArray(), LocalDate.now(ZONE).minusYears(67), 4, 1, "Prueba aislada");
+          "Pruebas25!".toCharArray(), LocalDate.now(ZONE).minusYears(67), 4, 1, 1, "Prueba aislada");
       new PhotoService(db).add(users[i].id(), AppConfig.resolve("photos/demo-real/01/01.png"));
     }
     int a = users[0].id(), b = users[1].id(), c = users[2].id(), d = users[3].id(), e = users[4].id();
@@ -59,7 +59,7 @@ public final class BugRegression {
         "Descubrir: reiniciar el ciclo no reintroduce matches");
     check(people.discover(a, 110, 120, 4, Set.of()).isEmpty(),
         "Descubrir: filtros sin candidatos devuelven vacío, sin bucle bloqueante");
-    people.save(e, users[4].name(), users[4].mail(), users[4].bornDate(), 4, 1, "", false);
+    people.save(e, users[4].name(), users[4].mail(), users[4].bornDate(), 4, 1, 1, "", false);
     check(!ids(people.discover(a, 67, 67, 4, Set.of())).contains(e),
         "Descubrir: respeta perfiles pausados");
     try (var connection = db.open()) {
@@ -98,49 +98,10 @@ public final class BugRegression {
           Timestamp.valueOf(concurrent)) == 1, "Una única reserva concurrente quedó guardada");
     }
 
-    // Simular un catálogo anterior y una personalización antes de ejecutar la actualización.
-    var firstProfile = DemoProfiles.PROFILES.getFirst();
     try (var connection = db.open()) {
-      Db.update(connection, "UPDATE \u0060USER\u0060 SET name=?,biography=?,idGender=? WHERE mail=?",
-          firstProfile.oldName(), firstProfile.oldBio(), firstProfile.oldGender(), firstProfile.mail());
-      Db.update(connection, "DELETE FROM USERPHOTO WHERE idUser=1");
-      Db.insert(connection, "INSERT INTO USERPHOTO (pathPhoto,isProfilePhoto,idUser)"
-          + " VALUES ('photos/demo/avatar-01.jpg',TRUE,1)");
-      Db.update(connection, "UPDATE \u0060USER\u0060 SET name='Mi nombre personalizado',"
-          + "biography='Mi biografía personal' WHERE idUser=2");
-      Db.update(connection, "DELETE FROM USERPHOTO WHERE idUser=2");
-      Db.insert(connection, "INSERT INTO USERPHOTO (pathPhoto,isProfilePhoto,idUser)"
-          + " VALUES ('testImages/persona_02_Mateo/01_perfil.png',TRUE,2)");
-    }
-    DemoProfiles.refresh(db);
-    var photoService = new PhotoService(db);
-    check(people.get(1).name().equals(firstProfile.name())
-            && people.get(1).biography().equals(firstProfile.bio()),
-        "Catálogo existente: nombres y biografías originales actualizados");
-    check(photoService.list(1).size() == 4
-            && photoService.list(1).stream().noneMatch(p -> p.path().contains("avatar")),
-        "Catálogo existente: avatar sustituido por cuatro fotos coherentes");
-    check(people.get(2).name().equals("Mi nombre personalizado")
-            && people.get(2).biography().equals("Mi biografía personal")
-            && photoService.list(2).getFirst().path().startsWith("testImages/"),
-        "Actualización respeta nombre, biografía y fotos personalizados");
-    List<Photo> before = photoService.list(1);
-    DemoProfiles.refresh(db);
-    check(photoService.list(1).equals(before), "Actualizar nuevamente no duplica fotografías");
-    try (var connection = db.open()) {
-      Db.update(connection, "DELETE FROM USERPHOTO WHERE idUser=1 AND isProfilePhoto=FALSE");
-    }
-    DemoProfiles.refresh(db);
-    check(photoService.list(1).size() == 1, "Una foto eliminada por el usuario no se repone al reconectar");
-    try (var connection = db.open()) {
-      check(Db.number(connection, "SELECT COUNT(*) FROM USERPHOTO WHERE idUser=? AND pathPhoto LIKE ?",
-          a, "photos/users/" + a + "/%") == 1, "Catálogo no modifica las cuentas fuera de la demo");
-    }
-    for (var profile : DemoProfiles.PROFILES) {
-      for (int n = 1; n <= profile.photoCount(); n++) {
-        var path = AppConfig.resolve(profile.photo(n));
-        check(Files.size(path) < 5 * 1024 * 1024 && ImageIO.read(path.toFile()) != null,
-            "Foto realista legible: " + profile.id() + "/" + n);
+      for (var row : Db.rows(connection, "SELECT pathPhoto FROM USERPHOTO")) {
+        var path = AppConfig.resolve((String)row.get("pathPhoto"));
+        check(Files.isRegularFile(path) && ImageIO.read(path.toFile()) != null, "Foto referenciada legible");
       }
     }
   }

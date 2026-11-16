@@ -19,6 +19,7 @@ public final class ProfileView extends Ui.Screen {
   private final JPasswordField password = new JPasswordField();
   private final JTextArea bio = new JTextArea(4, 20);
   private final JComboBox<Choice> gender = new JComboBox<>(),
+      orientation = new JComboBox<>(),
       faculty = new JComboBox<>(),
       major = new JComboBox<>();
   private final JCheckBox visible = new JCheckBox("Mostrar mi perfil en Descubrir", true);
@@ -41,6 +42,7 @@ public final class ProfileView extends Ui.Screen {
     if (registration) Ui.field(p, "Contraseña · mínimo 8 caracteres", password);
     Ui.field(p, "Nacimiento · AAAA-MM-DD", born);
     Ui.field(p, "Género", gender);
+    Ui.field(p, "Orientación sexual", orientation);
     Ui.field(p, "Facultad / escuela", faculty);
     Ui.field(p, "Carrera", major);
     bio.setLineWrap(true);
@@ -90,7 +92,7 @@ public final class ProfileView extends Ui.Screen {
                   ((Number) r.get("idMajor")).intValue(), ((Number) r.get("idFaculty")).intValue());
           }
           return new Object[] {
-            genders, faculties, majors, mapping, registration ? null : app.people.get(app.me.id())
+            genders, faculties, majors, mapping, registration ? null : app.people.get(app.me.id()), app.people.choices("orientation", 0)
           };
         },
         this::loaded);
@@ -101,6 +103,7 @@ public final class ProfileView extends Ui.Screen {
     populating = true;
     for (var x : (List<Choice>) data[0]) gender.addItem(x);
     for (var x : (List<Choice>) data[1]) faculty.addItem(x);
+    for (var x : (List<Choice>) data[5]) orientation.addItem(x);
     allMajors = (List<Choice>) data[2];
     majorFaculty = (Map<Integer, Integer>) data[3];
     if (!registration) {
@@ -112,6 +115,7 @@ public final class ProfileView extends Ui.Screen {
       bio.setText(u.biography());
       visible.setSelected(u.status().equals("ACTIVE"));
       select(gender, u.gender());
+      select(orientation, u.orientation());
       select(faculty, majorFaculty.getOrDefault(u.major(), 0));
       filterMajors(u.major());
       reloadPhotos();
@@ -144,8 +148,8 @@ public final class ProfileView extends Ui.Screen {
     try {
       String n = name.getText().strip(), email = mail.getText().strip(), b = bio.getText();
       LocalDate birth = LocalDate.parse(born.getText().strip());
-      Choice g = (Choice) gender.getSelectedItem(), m = (Choice) major.getSelectedItem();
-      if (g == null || m == null)
+      Choice g = (Choice) gender.getSelectedItem(), m = (Choice) major.getSelectedItem(), o = (Choice) orientation.getSelectedItem();
+      if (g == null || m == null || o == null)
         throw new IllegalArgumentException("Selecciona género y carrera.");
       boolean activeProfile = visible.isSelected();
       char[] secret = password.getPassword();
@@ -154,8 +158,8 @@ public final class ProfileView extends Ui.Screen {
       task(
           () ->
               registration
-                  ? app.people.register(n, email, secret, birth, g.id(), m.id(), b)
-                  : app.people.save(userId, n, email, birth, g.id(), m.id(), b, activeProfile),
+                  ? app.people.register(n, email, secret, birth, g.id(), m.id(), o.id(), b)
+                  : app.people.save(userId, n, email, birth, g.id(), m.id(), o.id(), b, activeProfile),
           u -> {
             app.me = u;
             if (registration) app.profile(false);

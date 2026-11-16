@@ -16,10 +16,10 @@ public final class PeopleService {
     this.db = db;
   }
 
-  private static final String PROFILE = "SELECT u.*, m.name AS majorName, f.name AS faculty, (SELECT p.pathPhoto FROM USERPHOTO p"
+  private static final String PROFILE = "SELECT u.*, so.type AS orientationName, m.name AS majorName, f.name AS faculty, (SELECT p.pathPhoto FROM USERPHOTO p"
       + " WHERE p.idUser=u.idUser ORDER BY p.isProfilePhoto DESC,p.idUserPhoto LIMIT 1) AS"
       + " photo FROM `USER` u JOIN MAJOR m ON m.idMajor=u.idMajor JOIN FACULTY f ON"
-      + " f.idFaculty=m.idFaculty ";
+      + " f.idFaculty=m.idFaculty JOIN SEXUALORIENTATION so ON so.idSexualOrientation=u.idSexualOrientation ";
 
   private static User user(Map<String, Object> r) {
     return new User(
@@ -30,6 +30,8 @@ public final class PeopleService {
         ((java.sql.Date) r.get("bornDate")).toLocalDate(),
         ((Number) r.get("idGender")).intValue(),
         ((Number) r.get("idMajor")).intValue(),
+        ((Number) r.get("idSexualOrientation")).intValue(),
+        (String) r.get("orientationName"),
         (String) r.get("majorName"),
         (String) r.get("faculty"),
         (String) r.get("status"),
@@ -63,6 +65,7 @@ public final class PeopleService {
       case "faculty" -> "SELECT idFaculty AS id,name FROM FACULTY ORDER BY name";
       case "major" -> "SELECT idMajor AS id,name FROM MAJOR WHERE idFaculty=? ORDER BY name";
       case "allMajor" -> "SELECT idMajor AS id,name FROM MAJOR ORDER BY name";
+      case "orientation" -> "SELECT idSexualOrientation AS id,type AS name FROM SEXUALORIENTATION ORDER BY idSexualOrientation";
       case "gender" -> "SELECT idGender AS id,genderType AS name FROM GENDER ORDER BY idGender";
       default -> throw new IllegalArgumentException("Catálogo desconocido");
     };
@@ -88,7 +91,7 @@ public final class PeopleService {
   }
 
   public User register(
-      String name, String mail, char[] password, LocalDate birth, int gender, int major, String bio)
+      String name, String mail, char[] password, LocalDate birth, int gender, int major, int orientation, String bio)
       throws Exception {
     validate(name, mail, birth, bio);
     String hash;
@@ -102,14 +105,15 @@ public final class PeopleService {
     int id = db.tx(
         c -> Db.insert(
             c,
-            "INSERT INTO `USER` (name,mail,password,bornDate,idGender,idMajor,biography)"
-                + " VALUES (?,?,?,?,?,?,?)",
+            "INSERT INTO `USER` (name,mail,password,bornDate,idGender,idMajor,idSexualOrientation,biography)"
+                + " VALUES (?,?,?,?,?,?,?,?)",
             name.trim(),
             mail.trim().toLowerCase(Locale.ROOT),
             hash,
             java.sql.Date.valueOf(birth),
             gender,
             major,
+            orientation,
             bio.trim()));
     return get(id);
   }
@@ -121,6 +125,7 @@ public final class PeopleService {
       LocalDate birth,
       int gender,
       int major,
+      int orientation,
       String bio,
       boolean active)
       throws Exception {
@@ -129,13 +134,14 @@ public final class PeopleService {
         c -> {
           Db.update(
               c,
-              "UPDATE `USER` SET name=?,mail=?,bornDate=?,idGender=?,idMajor=?,biography=?,status=?"
+              "UPDATE `USER` SET name=?,mail=?,bornDate=?,idGender=?,idMajor=?,idSexualOrientation=?,biography=?,status=?"
                   + " WHERE idUser=?",
               name.trim(),
               mail.trim().toLowerCase(Locale.ROOT),
               java.sql.Date.valueOf(birth),
               gender,
               major,
+              orientation,
               bio.trim(),
               active ? "ACTIVE" : "PAUSED",
               id);

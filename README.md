@@ -1,47 +1,39 @@
 # PoliTinder
 
-Aplicación Java 25 + Swing + MySQL para ejecutar desde VS Code. Las dependencias ya están en `lib/`; no requiere Maven ni un ejecutable `.exe`.
+Proyecto del Grupo G para la Escuela Politécnica Nacional. Java 25, Swing, FlatLaf y MySQL mediante JDBC. Ejecutar `src/politinder/Main.java` desde VS Code; las bibliotecas están en `lib/`, sin Maven.
 
-## Ejecutar
+## Instalar o actualizar
 
-Abre esta carpeta en VS Code y ejecuta `src/politinder/Main.java` con Run Java. La conexión usa por defecto `localhost:3306` y `root`; introduce tu contraseña MySQL en la pantalla de conexión. No se guarda en disco.
+- **Base nueva:** botón «Crear base + datos demo» o ejecutar `sql/01_ddl.sql` una sola vez. Este archivo unifica DDL y DML: once tablas, 30 usuarios, 70 fotos, 16 likes, 6 matches, 6 chats, 24 mensajes y 8 citas.
+- **Base existente:** usar «Actualizar esquema existente», conectar normalmente con la app actualizada o ejecutar `sql/02_actualizar_base.sql` desde Workbench. Añade SEXUALORIENTATION y su FK sin borrar perfiles, claves ni conversaciones. Las cuentas existentes quedan en «Prefiero no indicarlo» y pueden elegir otro valor en su perfil.
+- La contraseña MySQL se introduce en la app, permanece en memoria y no se guarda en Git. No ejecutar el instalador inicial sobre la base existente.
+- `CUENTAS_PRUEBA.txt` contiene los accesos ficticios para demostrar la app.
 
-- Base nueva: **Crear base + datos demo**, o ejecuta en Workbench `sql/01_ddl.sql` seguido de `sql/02_dml.sql` sobre tablas vacías.
-- Base existente: **Ampliar demo a 30 usuarios**, o ejecuta `sql/04_ampliar_demo.sql` con la app cerrada. Este archivo conserva usuarios, claves y chats existentes y puede repetirse sin duplicar datos.
-- Después de ampliar, usa las cuentas de `CUENTAS_PRUEBA.txt`. La contraseña inicial demo es `PoliDemo25!`.
+La migración no modifica fechas históricas ni vuelve a insertar la demo. La variedad de fechas se incluye en la instalación nueva. El esquema utiliza los valores predeterminados InnoDB y utf8mb4; el instalador los comprueba.
 
-El DDL inicial crea exactamente diez tablas. El DML inicial contiene 30 perfiles ficticios y 70 fotos: cinco perfiles con cuatro fotos y veinticinco con dos. En una base existente se añaden las diez cuentas nuevas y se completan hasta dos fotos por cuenta demo; tus cuentas personales conservan sus fotos.
+## Reportes
 
-## Entregables de SQL y documentación
+`sql/03_reportes.sql` contiene las nueve consultas aportadas por el grupo, con títulos y explicaciones para la app. «Recargar consultas» vuelve a leer el archivo. Los filtros se muestran según los parámetros presentes; estas nueve consultas tienen condiciones literales y no necesitan filtros adicionales.
 
-| Archivo | Contenido |
-|---|---|
-| `sql/01_ddl.sql` | Tablas, claves foráneas, índices y restricciones del ER. |
-| `sql/02_dml.sql` | Carga inicial: usuarios, fotos, likes, matches, chats, mensajes y citas. |
-| `sql/03_reportes.sql` | Nueve reportes; la app lee este mismo archivo. |
-| `sql/04_ampliar_demo.sql` | Ampliación para una base ya poblada. |
-| `sql/EXPLICACION_DML.txt` | Explicación de cada inserción, claves y funciones utilizadas. |
-| `CUENTAS_PRUEBA.txt` | Seis cuentas y ejemplos de pruebas. |
-| `docs/ER/PoliTinder_ER_original.jpg` | Imagen original del ER, sin modificaciones. |
-| `docs/ER/EXPLICACION_ER.md` | Entidades, relaciones y reglas del modelo. |
-| `docs/VALIDACION.txt` | Resultado de las verificaciones y límites de la revisión. |
-| `photos/PROMPTS_NUEVAS_FOTOS.txt` | Prompts utilizados para completar las fotografías ficticias. |
+El archivo original, sin alterar, está en `sql/Queries a presentar.sql` y `docs/entrega/Queries a presentar.sql`. Las diferencias están en `docs/ADAPTACION_QUERIES.md`: identificadores normalizados, GROUP BY explícito y matches distintos por carrera. Los resultados se muestran con las columnas devueltas por SQL.
 
-## Interfaz
+## Modelo y uso
 
-La ventana ocupa el 92% de la altura disponible y mantiene un formato vertical centrado. Es redimensionable, respeta la barra de tareas y desplaza el contenido en pantallas pequeñas. Usa una cabecera degradada violeta-fucsia, botones de acento y transiciones breves al abrir pantallas y cargar fotografías.
+`docs/ER/ERjpeg.jpeg` es el esquema físico vigente. Los otros dos diagramas son el MER V1 y el MER mejorado. `docs/ER/EXPLICACION_ER.md` documenta las once tablas y cómo participa cada una en la app. Preferencias, suscripciones y maxMatch aparecen en diseños conceptuales, pero no en el ER físico actual.
 
-Descubrir recorre los candidatos en ciclos aleatorios y excluye los matches existentes. Los chats requieren dos likes recíprocos. La agenda evita reservar dos citas en el mismo minuto para cualquiera de los participantes.
+Registro y perfil permiten elegir facultad/carrera, género y orientación. Descubrir mantiene ciclos aleatorios y excluye matches. Dos likes recíprocos habilitan el chat. La agenda evita citas simultáneas para un participante. Las fotos se conservan en archivos, con rutas en USERPHOTO. La consola SQL permite ejecutar instrucciones manuales que pueden eludir las reglas de Java.
 
-Las fotos están en `photos/`; MySQL guarda sus rutas relativas. Conserva esta carpeta al trasladar el proyecto. Los nombres, biografías e imágenes de demostración son ficticios.
+## Entrega y exposición
 
-## Reportes en Workbench
+- `docs/presentacion/ENLACE_CANVA.txt`: enlace al Canva editable.
+- `docs/GUION_EXPOSICION_GRUPO_G.md`: explicación por diapositiva y demostración de las consultas.
+- `docs/entrega/PoliTinder_Scripts_SQL.zip`: instalación, migración opcional, reportes y SQL original.
+- `sql/EXPLICACION_DML.txt`: inserciones, fechas y funciones utilizadas.
+- `docs/AUDITORIA_Y_PRUEBAS.md`: cobertura y depuración.
+- `docs/ejercicios/`: material de práctica conservado.
 
-Abre `sql/03_reportes.sql`. Las variables del inicio (`@edad_min`, `@edad_max`, `@carrera`, `@facultad`, `@corte`) permiten cambiar filtros. En la app se sustituyen por parámetros JDBC. El archivo antiguo de reportes `.txt` se reemplaza por este `.sql`.
+## Pruebas
 
-La consola SQL sigue disponible para consultas manuales. Sus sentencias pueden modificar la base y no pasan por las validaciones de negocio de Java.
+Las pruebas de integración usan exclusivamente localhost:33307 con una instancia MySQL desechable. `TestSuite --db` exige una base vacía y prueba instalación y reglas. `SchemaVerification` prueba el nuevo catálogo y la migración desde el esquema anterior. `UiSmokeTest` recorre las pantallas sin guardar configuración de conexión; sus imágenes de verificación quedan en `test-output/`, fuera de docs y de Git. No ejecutar estas pruebas contra el servidor habitual.
 
-## Ejercicios SQL
-
-En docs/ejercicios/PoliTinder_Ejercicios_SQL_y_Subconsultas.pdf encontrarás 40 ejercicios sin resolver, incluidos los temas de subconsultas, organizados por dificultad en ocho páginas.
-
+Se conservan `photos/users/`, `testImages/`, bibliotecas y licencias. `test/fixtures/legacy_schema.sql` es intencional: reproduce la versión antigua para comprobar la migración, no es un script de instalación vigente.

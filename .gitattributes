@@ -1,0 +1,3 @@
+# Conservar literalmente los SQL aportados por el grupo, incluidos saltos y espacios.
+"sql/Queries a presentar.sql" -text whitespace=-trailing-space
+"docs/entrega/Queries a presentar.sql" -text whitespace=-trailing-space

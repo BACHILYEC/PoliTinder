@@ -21,6 +21,8 @@ public final class Models {
       LocalDate bornDate,
       int gender,
       int major,
+      int orientation,
+      String orientationName,
       String majorName,
       String faculty,
       String status,

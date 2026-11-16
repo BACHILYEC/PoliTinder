@@ -22,10 +22,6 @@ Pruebas sugeridas con el DML inicial:
   mismo minuto, la app rechaza la nueva. Otras parejas sí pueden usar ese horario.
 - Revisa Reportes y compara con sql/03_reportes.sql en Workbench.
 
-Para una base nueva: ejecutar sql/01_ddl.sql y después sql/02_dml.sql, una vez.
-Para una base existente: ejecutar sql/04_ampliar_demo.sql con la app cerrada,
-o usar 'Ampliar demo a 30 usuarios' en la pantalla de conexión.
-La ampliación conserva contraseñas y datos existentes. Si cambiaste una clave,
-esa cuenta conserva tu contraseña; la ampliación no la restablece.
-
-Los nombres, biografías, mensajes y fotografías son datos ficticios de prueba.
+Para una base nueva: ejecutar sql/01_ddl.sql una vez (estructura y demo completas).
+Para una base existente: conectar con la app actualizada o ejecutar sql/02_actualizar_base.sql.
+La orientación sexual puede elegirse al registrar o editar el perfil.

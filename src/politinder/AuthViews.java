@@ -29,7 +29,7 @@ public final class AuthViews {
       connect = Ui.primary("Conectar", () -> execute("connect"));
       initialize = Ui.button("Crear base + datos demo", () -> execute("initialize"));
       test = Ui.button("Probar servidor", () -> execute("test"));
-      expand = Ui.button("Ampliar demo a 30 usuarios", () -> execute("expand"));
+      expand = Ui.button("Actualizar esquema existente", () -> execute("expand"));
       Ui.add(p, connect);
       Ui.add(p, test);
       Ui.add(p, initialize);
@@ -38,8 +38,8 @@ public final class AuthViews {
           p,
           Ui.text(
               "La creación inicial solo funciona si no existe la base politinder. También puedes"
-                  + " ejecutar los archivos DDL y DML desde Workbench. Si ya tienes la base, usa"
-                  + " Ampliar demo para añadir los perfiles y fotos que faltan."));
+                  + " ejecutar el script 01_ddl.sql desde Workbench. Si ya tienes la base, usa"
+                  + " Actualizar esquema existente para incorporar las nuevas tablas."));
       add(Ui.scroll(p), BorderLayout.CENTER);
       password.addActionListener(e -> execute("connect"));
     }
@@ -63,12 +63,11 @@ public final class AuthViews {
           () -> {
             String info = Installer.check(app.db);
             if (mode.equals("initialize")) Installer.initialize(app.db);
-            if (mode.equals("expand")) Installer.expandDemo(app.db);
             if (!mode.equals("test"))
               try (var c = app.db.open()) {
                 Db.number(c, "SELECT COUNT(*) FROM `USER`");
               }
-            if (!mode.equals("test")) DemoProfiles.refresh(app.db);
+            if (!mode.equals("test")) Installer.migrate(app.db);
             app.config.save();
             return info;
           },

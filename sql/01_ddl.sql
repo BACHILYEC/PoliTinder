@@ -1,3 +1,5 @@
+-- INSTALACIÓN COMPLETA: estructura + demo ampliada (30 usuarios, 70 fotos).
+-- Solo para una base nueva. No borra la base existente.
 -- PoliTinder · MySQL 8.0.16+ · ejecutar UNA VEZ en una base nueva.
 -- Los valores predeterminados deben ser InnoDB y utf8mb4; la app los comprueba.
 -- No se borran bases ni se ignoran errores. Si ya existe politinder, revisar antes de continuar.
@@ -19,6 +21,10 @@ CREATE TABLE `GENDER` (
   `idGender` INT PRIMARY KEY AUTO_INCREMENT,
   `genderType` VARCHAR(60) NOT NULL UNIQUE
 );
+CREATE TABLE `SEXUALORIENTATION` (
+  `idSexualOrientation` INT PRIMARY KEY AUTO_INCREMENT,
+  `type` VARCHAR(80) NOT NULL UNIQUE
+);
 CREATE TABLE `USER` (
   `idUser` INT PRIMARY KEY AUTO_INCREMENT,
   `status` VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
@@ -31,8 +37,10 @@ CREATE TABLE `USER` (
   `updateDate` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   `idGender` INT NOT NULL,
   `idMajor` INT NOT NULL,
+  `idSexualOrientation` INT NOT NULL DEFAULT 1,
   CHECK (`status` IN ('ACTIVE','PAUSED')),
   FOREIGN KEY (`idGender`) REFERENCES `GENDER` (`idGender`),
+  FOREIGN KEY (`idSexualOrientation`) REFERENCES `SEXUALORIENTATION` (`idSexualOrientation`),
   FOREIGN KEY (`idMajor`) REFERENCES `MAJOR` (`idMajor`)
 );
 CREATE TABLE `USERPHOTO` (
@@ -84,3 +92,202 @@ CREATE TABLE `POLIDATE` (
   FOREIGN KEY (`idPoliMatch`) REFERENCES `POLIMATCH` (`idPoliMatch`),
   INDEX `idx_date_match_time` (`idPoliMatch`, `dateOfPoliDate`)
 );
+
+-- DATOS DE DEMOSTRACIÓN (DML integrado)
+-- PoliTinder · datos ficticios. Ejecutar UNA VEZ sobre las tablas vacías.
+-- Contraseña demo de todos los usuarios: PoliDemo25! (hashes con sal individual).
+USE politinder;
+SET time_zone='-05:00';
+START TRANSACTION;
+INSERT INTO SEXUALORIENTATION (idSexualOrientation,type) VALUES (1,'Prefiero no indicarlo'),(2,'Heterosexual'),(3,'Homosexual'),(4,'Bisexual'),(5,'Pansexual'),(6,'Asexual');
+
+INSERT INTO FACULTY (idFaculty,name) VALUES (1,'Ingeniería de Sistemas');
+INSERT INTO FACULTY (idFaculty,name) VALUES (2,'Ciencias');
+INSERT INTO FACULTY (idFaculty,name) VALUES (3,'Ciencias Administrativas');
+INSERT INTO FACULTY (idFaculty,name) VALUES (4,'Ingeniería Civil y Ambiental');
+INSERT INTO FACULTY (idFaculty,name) VALUES (5,'Ingeniería Eléctrica y Electrónica');
+INSERT INTO FACULTY (idFaculty,name) VALUES (6,'Geología y Petróleos');
+INSERT INTO FACULTY (idFaculty,name) VALUES (7,'Ingeniería Mecánica');
+INSERT INTO FACULTY (idFaculty,name) VALUES (8,'Ingeniería Química y Agroindustria');
+INSERT INTO FACULTY (idFaculty,name) VALUES (9,'Escuela de Formación de Tecnólogos (ESFOT)');
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (1,'Software',1);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (2,'Computación',1);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (3,'Sistemas de Información',1);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (4,'Ciencia de Datos e Inteligencia Artificial',1);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (5,'Física',2);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (6,'Matemática',2);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (7,'Matemática Aplicada',2);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (8,'Economía',2);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (9,'Ingeniería de la Producción',3);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (10,'Ingeniería Civil',4);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (11,'Ingeniería Ambiental',4);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (12,'Electrónica y Automatización',5);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (13,'Electricidad',5);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (14,'Tecnologías de la Información',5);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (15,'Telecomunicaciones',5);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (16,'Geología',6);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (17,'Petróleos',6);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (18,'Ingeniería Mecánica',7);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (19,'Materiales',7);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (20,'Mecatrónica',7);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (21,'Agroindustria',8);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (22,'Ingeniería Química',8);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (23,'Tecnología Superior en Agua y Saneamiento Ambiental',9);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (24,'Tecnología Superior en Redes y Telecomunicaciones',9);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (25,'Tecnología Superior en Desarrollo de Software',9);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (26,'Tecnología Superior en Electromecánica',9);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (27,'Procesamiento de Alimentos',9);
+INSERT INTO MAJOR (idMajor,name,idFaculty) VALUES (28,'Procesamiento Industrial de la Madera',9);
+INSERT INTO GENDER (idGender,genderType) VALUES (1,'Mujer'),(2,'Hombre'),(3,'No binario'),(4,'Prefiero no indicarlo');
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (1,'ACTIVE','ana@politinder.test','pbkdf2$600000$aUICX/lpfkA8embW1rf/Ag==$lD0B22vakePM1hcQdKOQKmDty1GbddWdf2Sb9FCUarY=','Me gusta guardar los días en fotos y descubrir cafeterías pequeñas de Quito. Si tu plan incluye caminar sin prisa y una buena conversación, me apunto.','Ana Lucía Cárdenas',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 22 YEAR),INTERVAL 11 DAY),1,1,1,DATE_SUB(NOW(),INTERVAL 204 DAY),DATE_SUB(NOW(),INTERVAL 2 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (2,'ACTIVE','luis@politinder.test','pbkdf2$600000$WxeUdHD4F2KiZSkVo6XCDw==$/kZIVhANhqtiOPz1+D/r2Rde9v2PJIXy0zQDS7VfA5I=','Entre clases, una partida de básquet y proyectos que casi siempre terminan con café. Recomiéndame una canción y te comparto mi playlist para programar.','Luis Andrés Benavides',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 23 YEAR),INTERVAL 22 DAY),2,1,1,DATE_SUB(NOW(),INTERVAL 208 DAY),DATE_SUB(NOW(),INTERVAL 4 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (3,'ACTIVE','sofia@politinder.test','pbkdf2$600000$6mCHh6kXsYaXeTZO/RReYQ==$H4K+KAw8BEgCMHSFhDL1Yatj2/e+R68A0loQdDTMXE4=','Leo de todo un poco y siempre llevo una libreta para dibujar. Mi plan ideal: museo, helado y una conversación que haga olvidar la hora.','Sofía Isabel Montalvo',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 21 YEAR),INTERVAL 33 DAY),1,5,1,DATE_SUB(NOW(),INTERVAL 212 DAY),DATE_SUB(NOW(),INTERVAL 6 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (4,'ACTIVE','mateo@politinder.test','pbkdf2$600000$0oJ1/CnmyjnQf8f6nf03+A==$ZY7/pkBYOgcbVfb2X48ZSdNEDGyAYcg/6PXR4gwt+l4=','Los fines de semana cambio los apuntes por una caminata. Estoy aprendiendo a cocinar; mi especialidad, por ahora, es invitar a probar el resultado.','Mateo Alejandro Jaramillo',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 24 YEAR),INTERVAL 44 DAY),2,9,1,DATE_SUB(NOW(),INTERVAL 216 DAY),DATE_SUB(NOW(),INTERVAL 8 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (5,'ACTIVE','valentina@politinder.test','pbkdf2$600000$08swPQ7DvQomsCEWySqaKw==$QFzroVYM2ux5FcvPpam0xRfW85IrrTMH3y93ly1mlAE=','Fan de la música en vivo y de los atardeceres desde Guápulo. Busco alguien con curiosidad, sentido del humor y ganas de conocer rincones nuevos.','Valentina Paz Cevallos',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 20 YEAR),INTERVAL 55 DAY),1,2,1,DATE_SUB(NOW(),INTERVAL 220 DAY),DATE_SUB(NOW(),INTERVAL 10 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (6,'ACTIVE','diego@politinder.test','pbkdf2$600000$TG6wlwvTSamrQYVqw9kItw==$WzpvIcqEopc7SmcvCH5CcbSt/JyrWz6Cic1vN7IeB+M=','Me gustan las bicicletas, los documentales y arreglar cosas que todavía tienen solución. Un paseo por el parque y un café suenan como un buen comienzo.','Diego Sebastián Aguirre',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 25 YEAR),INTERVAL 66 DAY),2,10,1,DATE_SUB(NOW(),INTERVAL 224 DAY),DATE_SUB(NOW(),INTERVAL 12 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (7,'ACTIVE','camila@politinder.test','pbkdf2$600000$OsyEyhuSnAm298CPE4Wfgg==$/6MUWmueZjbZxfdgFhDDCGSof7fl6f5PU+AOYhaDv8k=','Me río fácil, cocino con música y nunca digo que no a un paseo improvisado. Si conoces un buen lugar para desayunar después de clases, tenemos plan.','Camila Fernanda Caicedo',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 23 YEAR),INTERVAL 77 DAY),1,13,1,DATE_SUB(NOW(),INTERVAL 228 DAY),DATE_SUB(NOW(),INTERVAL 14 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (8,'ACTIVE','nicolas@politinder.test','pbkdf2$600000$h2eOnfzLJE7FQvG8M76+5w==$2pe2Wxg0GvyjnBEB6yzuMnFenaM/dCHY6FjicipzW1U=','Disfruto las películas que dejan tema de conversación y las escapadas a la montaña. También soy feliz con un juego de mesa y buena compañía.','Nicolás Esteban Chiriboga',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 26 YEAR),INTERVAL 88 DAY),2,16,1,DATE_SUB(NOW(),INTERVAL 232 DAY),DATE_SUB(NOW(),INTERVAL 16 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (9,'ACTIVE','isabella@politinder.test','pbkdf2$600000$DH8GuiL41V9pz2WtibKOwQ==$azOzHKtrA3lh1Mpo+2Z0UNU4g/S74DpKPD2I78vHq08=','Me encanta bailar, probar recetas y encontrar pequeñas librerías. Estoy aquí para conocer a alguien con quien los planes sencillos se vuelvan memorables.','Isabella María Naranjo',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 22 YEAR),INTERVAL 99 DAY),1,18,1,DATE_SUB(NOW(),INTERVAL 236 DAY),DATE_SUB(NOW(),INTERVAL 18 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (10,'ACTIVE','daniel@politinder.test','pbkdf2$600000$qj4cbQ5kJEZg7hccpz2pvQ==$3iivhual02ER4/7Ufc6FLC4hZpyLDNaL9H0VjAY0DjA=','Entre libros, fotografía urbana y proyectos de la Poli. Prefiero una charla tranquila a los mensajes eternos; podemos empezar por un café.','Daniel Andrés Endara',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 24 YEAR),INTERVAL 110 DAY),2,21,1,DATE_SUB(NOW(),INTERVAL 240 DAY),DATE_SUB(NOW(),INTERVAL 20 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (11,'ACTIVE','lucia@politinder.test','pbkdf2$600000$3UFbclDTMQcO3yo9S+b9Bw==$zNIYYKFaefMrZJHPcLiy07fAEUCGNVYky+dnKvvFrvQ=','Los domingos son para caminar, sacar fotos y buscar algo rico que comer. Me gusta la gente que escucha y se entusiasma contando lo que le apasiona.','Lucía Belén Santillán',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 21 YEAR),INTERVAL 121 DAY),1,22,1,DATE_SUB(NOW(),INTERVAL 244 DAY),DATE_SUB(NOW(),INTERVAL 22 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (12,'ACTIVE','emilia@politinder.test','pbkdf2$600000$ndn6i8NfFx93UwBzPy80yA==$jvFM2VHT5ZLTSGBLY3eEseqxQsFWMI/b6vi0+bpaI48=','Colecciono canciones, plantas pequeñas y ganas de viajar. Siempre tengo una recomendación de película y espacio para descubrir una nueva contigo.','Emilia Josefina Viteri',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 20 YEAR),INTERVAL 132 DAY),1,1,1,DATE_SUB(NOW(),INTERVAL 248 DAY),DATE_SUB(NOW(),INTERVAL 24 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (13,'ACTIVE','joaquin@politinder.test','pbkdf2$600000$TEQLE2qBJMFD7I4fbvl1uQ==$4j0k+Lx6n3hshCban7nRCkg0CsUbQejnlPJ2bgWfdjE=','Juego fútbol, improviso en la guitarra y disfruto los paseos largos. Me gustan las conversaciones honestas y quienes no se toman demasiado en serio.','Joaquín Andrés Cordero',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 25 YEAR),INTERVAL 143 DAY),2,4,1,DATE_SUB(NOW(),INTERVAL 252 DAY),DATE_SUB(NOW(),INTERVAL 26 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (14,'ACTIVE','martina@politinder.test','pbkdf2$600000$Ns2zOhDKEB1U3xANJ09ROw==$5v/f1nd97gjOxu3EFRyY/L75fGMjSJ+2u0HqkTqCgWM=','Me pierdo feliz entre libros y exposiciones. Aprendo a hacer cerámica y busco compañía para descubrir sitios bonitos cerca de la universidad.','Martina Isabel Salazar',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 23 YEAR),INTERVAL 154 DAY),1,7,1,DATE_SUB(NOW(),INTERVAL 256 DAY),DATE_SUB(NOW(),INTERVAL 28 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (15,'ACTIVE','gabriel@politinder.test','pbkdf2$600000$piiLxWjTfkYynrtUKt9LWg==$zBmOVV6YoqgcyNRD0yjdqgTqqxR+0M6wyNRjGiw7ZvY=','Me recarga nadar, escuchar jazz y pasar tiempo al aire libre. Me interesa conocer a alguien con quien compartir metas, risas y una buena sobremesa.','Gabriel Alejandro Villamar',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 27 YEAR),INTERVAL 165 DAY),2,14,1,DATE_SUB(NOW(),INTERVAL 260 DAY),DATE_SUB(NOW(),INTERVAL 30 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (16,'ACTIVE','renata@politinder.test','pbkdf2$600000$QzsI5ZerWMyWCKRRlOHP+A==$+4h8i9lgxuq92c+sJa+SbqBBXIjPbaFQDzs021e7Egg=','Me gusta bailar salsa, cocinar para mis amigos y ver la ciudad desde otro ángulo. Hagamos un plan sencillo y dejemos que la conversación lo mejore.','Renata Victoria Palacios',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 24 YEAR),INTERVAL 176 DAY),1,20,1,DATE_SUB(NOW(),INTERVAL 264 DAY),DATE_SUB(NOW(),INTERVAL 32 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (17,'PAUSED','andres@politinder.test','pbkdf2$600000$eKn0ullBqutIVzxHQ3YbeQ==$L9qODKePNNknIkDrDltiWSaTpAUaJRlBYTmvTA6huTo=','Curioso por naturaleza: tecnología, senderos y recetas nuevas. Valoro la calma, el humor y la gente que cumple lo que promete.','Andrés Felipe Alvarado',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 33 YEAR),INTERVAL 187 DAY),2,22,1,DATE_SUB(NOW(),INTERVAL 268 DAY),DATE_SUB(NOW(),INTERVAL 34 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (18,'PAUSED','elena@politinder.test','pbkdf2$600000$OU6Ou5XIF2VbYPxOPl7vmQ==$N8XtHnII8zidin9ttU+R1dGHVWnDi6oONLRnMVUnLfE=','Disfruto la fotografía, el cine latinoamericano y las caminatas de domingo. Un encuentro con buena conversación vale más que un plan perfecto.','Elena Cristina Echeverría',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 33 YEAR),INTERVAL 198 DAY),1,24,1,DATE_SUB(NOW(),INTERVAL 272 DAY),DATE_SUB(NOW(),INTERVAL 36 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (19,'ACTIVE','paula@politinder.test','pbkdf2$600000$xpBymLMKzJXjjiUtpCcNLA==$qAEYLhUPG5wTwG90kWBkS4hno1P906+iOvANDuKcT5k=','Estoy aprendiendo guitarra y buscando mi cafetería favorita de Quito. Me gustan los perros, las películas de misterio y los planes espontáneos.','Paula Daniela Ponce',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 19 YEAR),INTERVAL 209 DAY),1,1,1,DATE_SUB(NOW(),INTERVAL 276 DAY),DATE_SUB(NOW(),INTERVAL 38 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (20,'ACTIVE','samuel@politinder.test','pbkdf2$600000$qVso9GZrDfDCMkmCkvb+zQ==$8nx2W9qrLrnDbDDNLoAFlWOVuWtJLOPbJ2IRXKCZ5GQ=','Fan del básquet, los videojuegos cooperativos y los viajes cortos. Si te ríes de los chistes malos, probablemente nos llevemos muy bien.','Samuel David Zambrano',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 22 YEAR),INTERVAL 220 DAY),2,2,1,DATE_SUB(NOW(),INTERVAL 280 DAY),DATE_SUB(NOW(),INTERVAL 40 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (21,'ACTIVE','mariana@politinder.test','pbkdf2$600000$pn7gYaOuv1tNqx6jDJGUbQ==$SxoSEAhbIdjQ8euDtuGggOeonWqIsPiOZIuYG8/Pmss=','Me encantan los jardines, el chocolate caliente y las conversaciones que empiezan con una buena pregunta.','Mariana Alejandra Rosero',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 24 YEAR),INTERVAL 231 DAY),1,4,1,DATE_SUB(NOW(),INTERVAL 284 DAY),DATE_SUB(NOW(),INTERVAL 42 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (22,'ACTIVE','sebastian@politinder.test','pbkdf2$600000$n3jRiBSdkxu0z1GbUk9r/g==$GvI21kcTjbafsZUQpK3gCsELBMKzet0lS4EMoGZzhjQ=','Toco el bajo y colecciono rutas para caminar por Quito. Busco compañía para descubrir música y lugares nuevos.','Sebastián Emilio Almeida',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 25 YEAR),INTERVAL 242 DAY),2,5,1,DATE_SUB(NOW(),INTERVAL 288 DAY),DATE_SUB(NOW(),INTERVAL 44 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (23,'ACTIVE','daniela@politinder.test','pbkdf2$600000$oyOwBa/PptmYTdUzY8NxyA==$2OI3VzaxhOzUxCbPxsD+5JfppwcVAttdZ6pz6hYxzTI=','Entre libros y proyectos siempre encuentro tiempo para una merienda. Me gustan los museos y el humor tranquilo.','Daniela Carolina Espinosa',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 23 YEAR),INTERVAL 253 DAY),1,6,1,DATE_SUB(NOW(),INTERVAL 292 DAY),DATE_SUB(NOW(),INTERVAL 46 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (24,'ACTIVE','alejandro@politinder.test','pbkdf2$600000$tGYF6JLNqdHfo0rhQBQk0g==$mRaxbNo+Wkw1041wlSX2xJNwd8WZhkdvZEVlb33BKBw=','El básquet, la cocina y los viajes cortos son mis planes favoritos. Me apunto a un café después de clases.','Alejandro José Burbano',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 26 YEAR),INTERVAL 264 DAY),2,9,1,DATE_SUB(NOW(),INTERVAL 296 DAY),DATE_SUB(NOW(),INTERVAL 48 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (25,'ACTIVE','antonella@politinder.test','pbkdf2$600000$9FZQcaoypf72qet6ZkNztg==$vR6nWk3DwY7IxO7kjGWo09MnZh8LG/0sKdx352tUoPo=','Fotografío montañas y aprendo a pintar con acuarela. Un paseo al aire libre siempre me alegra el día.','Antonella Belén Maldonado',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 24 YEAR),INTERVAL 275 DAY),1,10,1,DATE_SUB(NOW(),INTERVAL 300 DAY),DATE_SUB(NOW(),INTERVAL 50 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (26,'ACTIVE','emilio@politinder.test','pbkdf2$600000$4hirDMo1vYQs9OiVxjTXCg==$vj605hEm7FwF7HErnPLmJWotOB8VukLOLUEVmbeTPs4=','Curioso por la ciencia y fan de los juegos de mesa. Tengo una lista larga de cafeterías por conocer.','Emilio Rafael Carrasco',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 27 YEAR),INTERVAL 286 DAY),2,12,1,DATE_SUB(NOW(),INTERVAL 304 DAY),DATE_SUB(NOW(),INTERVAL 52 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (27,'ACTIVE','sara@politinder.test','pbkdf2$600000$t0WdQxsyvwbmUeZKR5cuaQ==$Gy7LLil+xfgxD3BXXeswUMfiGFedy0X41gDlg7+A1U0=','Bailo, leo novelas y disfruto cocinar con mis amigos. Valoro las conversaciones honestas y las risas espontáneas.','Sara Gabriela Hidalgo',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 25 YEAR),INTERVAL 297 DAY),1,16,1,DATE_SUB(NOW(),INTERVAL 308 DAY),DATE_SUB(NOW(),INTERVAL 54 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (28,'ACTIVE','julian@politinder.test','pbkdf2$600000$xFVcfSBHqVOx8Zdk3oDKtw==$eZdVOPJB3eFkB7tXiVdqJ6QJa1Ia55VR/Ugkitfx6rQ=','Me gustan la guitarra, el ciclismo y los planes sencillos. Recomiéndame una canción para el camino.','Julián Esteban Paredes',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 23 YEAR),INTERVAL 308 DAY),2,18,1,DATE_SUB(NOW(),INTERVAL 312 DAY),DATE_SUB(NOW(),INTERVAL 56 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (29,'ACTIVE','victoria@politinder.test','pbkdf2$600000$XRvyLQ8fJTDp6XXKACthdw==$U4YrxkjxN4FU2Or0zors7e4D0LzOVjKI1fvVRBbF/n0=','Visito exposiciones y dibujo en cualquier libreta. Me gustaría conocer a alguien para compartir nuevas experiencias.','Victoria Isabel Terán',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 26 YEAR),INTERVAL 319 DAY),1,21,1,DATE_SUB(NOW(),INTERVAL 316 DAY),DATE_SUB(NOW(),INTERVAL 58 DAY));
+INSERT INTO `USER` (idUser,status,mail,password,biography,name,bornDate,idGender,idMajor,idSexualOrientation,creationDate,updateDate) VALUES (30,'ACTIVE','tomas@politinder.test','pbkdf2$600000$zNTbBz7iRTY7ozWVorpakg==$R24JPm0hMxKKgz5Rqk2FtT3GnlfVOJ9wslVu6mlcm0c=','Me entusiasman la tecnología y las caminatas largas. Un helado y una buena conversación son un gran comienzo.','Tomás Alejandro Valverde',DATE_SUB(DATE_SUB(CURDATE(),INTERVAL 24 YEAR),INTERVAL 330 DAY),2,25,1,DATE_SUB(NOW(),INTERVAL 320 DAY),DATE_SUB(NOW(),INTERVAL 60 DAY));
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (1,'photos/demo-real/01/01.png',1,1);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (2,'photos/demo-real/01/02.png',0,1);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (3,'photos/demo-real/01/03.png',0,1);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (4,'photos/demo-real/01/04.png',0,1);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (5,'photos/demo-real/02/01.png',1,2);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (6,'photos/demo-real/03/01.png',1,3);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (7,'photos/demo-real/04/01.png',1,4);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (8,'photos/demo-real/04/02.png',0,4);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (9,'photos/demo-real/04/03.png',0,4);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (10,'photos/demo-real/04/04.png',0,4);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (11,'photos/demo-real/05/01.png',1,5);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (12,'photos/demo-real/05/02.png',0,5);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (13,'photos/demo-real/05/03.png',0,5);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (14,'photos/demo-real/05/04.png',0,5);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (15,'photos/demo-real/06/01.png',1,6);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (16,'photos/demo-real/07/01.png',1,7);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (17,'photos/demo-real/07/02.png',0,7);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (18,'photos/demo-real/07/03.png',0,7);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (19,'photos/demo-real/07/04.png',0,7);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (20,'photos/demo-real/08/01.png',1,8);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (21,'photos/demo-real/09/01.png',1,9);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (22,'photos/demo-real/10/01.png',1,10);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (23,'photos/demo-real/10/02.png',0,10);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (24,'photos/demo-real/10/03.png',0,10);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (25,'photos/demo-real/10/04.png',0,10);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (26,'photos/demo-real/11/01.png',1,11);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (27,'photos/demo-real/12/01.png',1,12);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (28,'photos/demo-real/13/01.png',1,13);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (29,'photos/demo-real/14/01.png',1,14);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (30,'photos/demo-real/15/01.png',1,15);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (31,'photos/demo-real/16/01.png',1,16);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (32,'photos/demo-real/17/01.png',1,17);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (33,'photos/demo-real/18/01.png',1,18);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (34,'photos/demo-real/19/01.png',1,19);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (35,'photos/demo-real/20/01.png',1,20);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (36,'photos/demo-real/02/02.png',0,2);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (37,'photos/demo-real/03/02.png',0,3);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (38,'photos/demo-real/06/02.png',0,6);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (39,'photos/demo-real/08/02.png',0,8);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (40,'photos/demo-real/09/02.png',0,9);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (41,'photos/demo-real/11/02.png',0,11);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (42,'photos/demo-real/12/02.png',0,12);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (43,'photos/demo-real/13/02.png',0,13);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (44,'photos/demo-real/14/02.png',0,14);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (45,'photos/demo-real/15/02.png',0,15);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (46,'photos/demo-real/16/02.png',0,16);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (47,'photos/demo-real/17/02.png',0,17);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (48,'photos/demo-real/18/02.png',0,18);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (49,'photos/demo-real/19/02.png',0,19);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (50,'photos/demo-real/20/02.png',0,20);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (51,'photos/demo-real/21/01.png',1,21);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (52,'photos/demo-real/21/02.png',0,21);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (53,'photos/demo-real/22/01.png',1,22);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (54,'photos/demo-real/22/02.png',0,22);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (55,'photos/demo-real/23/01.png',1,23);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (56,'photos/demo-real/23/02.png',0,23);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (57,'photos/demo-real/24/01.png',1,24);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (58,'photos/demo-real/24/02.png',0,24);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (59,'photos/demo-real/25/01.png',1,25);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (60,'photos/demo-real/25/02.png',0,25);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (61,'photos/demo-real/26/01.png',1,26);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (62,'photos/demo-real/26/02.png',0,26);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (63,'photos/demo-real/27/01.png',1,27);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (64,'photos/demo-real/27/02.png',0,27);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (65,'photos/demo-real/28/01.png',1,28);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (66,'photos/demo-real/28/02.png',0,28);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (67,'photos/demo-real/29/01.png',1,29);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (68,'photos/demo-real/29/02.png',0,29);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (69,'photos/demo-real/30/01.png',1,30);
+INSERT INTO USERPHOTO (idUserPhoto,pathPhoto,isProfilePhoto,idUser) VALUES (70,'photos/demo-real/30/02.png',0,30);
+INSERT INTO `LIKE` (idLike,idUser1,idUser2) VALUES (1,1,2),(2,2,1);
+INSERT INTO `LIKE` (idLike,idUser1,idUser2) VALUES (3,1,3),(4,3,1);
+INSERT INTO `LIKE` (idLike,idUser1,idUser2) VALUES (5,4,5),(6,5,4);
+INSERT INTO `LIKE` (idLike,idUser1,idUser2) VALUES (7,6,7),(8,7,6);
+INSERT INTO `LIKE` (idLike,idUser1,idUser2) VALUES (9,8,9),(10,9,8);
+INSERT INTO `LIKE` (idLike,idUser1,idUser2) VALUES (11,10,11),(12,11,10);
+INSERT INTO `LIKE` (idLike,idUser1,idUser2) VALUES (13,12,13),(14,14,15),(15,16,17),(16,2,3);
+INSERT INTO POLIMATCH (idPoliMatch,idLike1,idLike2) VALUES (1,1,2);
+INSERT INTO CHAT (idChat,idPoliMatch) VALUES (1,1);
+INSERT INTO POLIMATCH (idPoliMatch,idLike1,idLike2) VALUES (2,3,4);
+INSERT INTO CHAT (idChat,idPoliMatch) VALUES (2,2);
+INSERT INTO POLIMATCH (idPoliMatch,idLike1,idLike2) VALUES (3,5,6);
+INSERT INTO CHAT (idChat,idPoliMatch) VALUES (3,3);
+INSERT INTO POLIMATCH (idPoliMatch,idLike1,idLike2) VALUES (4,7,8);
+INSERT INTO CHAT (idChat,idPoliMatch) VALUES (4,4);
+INSERT INTO POLIMATCH (idPoliMatch,idLike1,idLike2) VALUES (5,9,10);
+INSERT INTO CHAT (idChat,idPoliMatch) VALUES (5,5);
+INSERT INTO POLIMATCH (idPoliMatch,idLike1,idLike2) VALUES (6,11,12);
+INSERT INTO CHAT (idChat,idPoliMatch) VALUES (6,6);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (1,DATE_SUB(DATE_SUB(NOW(),INTERVAL 29 DAY),INTERVAL 17 MINUTE),'¡Hola! Qué gusto coincidir 😊',1,1);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (2,DATE_SUB(DATE_SUB(NOW(),INTERVAL 28 DAY),INTERVAL 34 MINUTE),'¡Hola! ¿Cómo va tu semestre?',1,2);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (3,DATE_SUB(DATE_SUB(NOW(),INTERVAL 27 DAY),INTERVAL 51 MINUTE),'Entre clases y proyectos, pero bien. ¿Un café?',1,1);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (4,DATE_SUB(DATE_SUB(NOW(),INTERVAL 26 DAY),INTERVAL 68 MINUTE),'¡Me apunto! Podemos ir a la cafetería.',1,2);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (5,DATE_SUB(DATE_SUB(NOW(),INTERVAL 25 DAY),INTERVAL 85 MINUTE),'Perfecto, lo agendamos como PoliDate.',1,1);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (6,DATE_SUB(DATE_SUB(NOW(),INTERVAL 24 DAY),INTERVAL 102 MINUTE),'¡Nos vemos! ☕',1,2);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (7,DATE_SUB(DATE_SUB(NOW(),INTERVAL 23 DAY),INTERVAL 119 MINUTE),'¡Hola! Qué gusto coincidir 😊',2,1);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (8,DATE_SUB(DATE_SUB(NOW(),INTERVAL 22 DAY),INTERVAL 136 MINUTE),'¡Hola! ¿Cómo va tu semestre?',2,3);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (9,DATE_SUB(DATE_SUB(NOW(),INTERVAL 21 DAY),INTERVAL 153 MINUTE),'Entre clases y proyectos, pero bien. ¿Un café?',2,1);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (10,DATE_SUB(DATE_SUB(NOW(),INTERVAL 20 DAY),INTERVAL 170 MINUTE),'¡Me apunto! Podemos ir a la cafetería.',2,3);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (11,DATE_SUB(DATE_SUB(NOW(),INTERVAL 19 DAY),INTERVAL 187 MINUTE),'Perfecto, lo agendamos como PoliDate.',2,1);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (12,DATE_SUB(DATE_SUB(NOW(),INTERVAL 18 DAY),INTERVAL 204 MINUTE),'¡Nos vemos! ☕',2,3);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (13,DATE_SUB(DATE_SUB(NOW(),INTERVAL 17 DAY),INTERVAL 221 MINUTE),'¡Hola! Qué gusto coincidir 😊',3,4);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (14,DATE_SUB(DATE_SUB(NOW(),INTERVAL 16 DAY),INTERVAL 238 MINUTE),'¡Hola! ¿Cómo va tu semestre?',3,5);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (15,DATE_SUB(DATE_SUB(NOW(),INTERVAL 15 DAY),INTERVAL 255 MINUTE),'Entre clases y proyectos, pero bien. ¿Un café?',3,4);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (16,DATE_SUB(DATE_SUB(NOW(),INTERVAL 14 DAY),INTERVAL 272 MINUTE),'¡Me apunto! Podemos ir a la cafetería.',3,5);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (17,DATE_SUB(DATE_SUB(NOW(),INTERVAL 13 DAY),INTERVAL 289 MINUTE),'Perfecto, lo agendamos como PoliDate.',3,4);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (18,DATE_SUB(DATE_SUB(NOW(),INTERVAL 12 DAY),INTERVAL 306 MINUTE),'¡Nos vemos! ☕',3,5);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (19,DATE_SUB(DATE_SUB(NOW(),INTERVAL 11 DAY),INTERVAL 323 MINUTE),'¡Hola! Qué gusto coincidir 😊',4,6);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (20,DATE_SUB(DATE_SUB(NOW(),INTERVAL 10 DAY),INTERVAL 340 MINUTE),'¡Hola! ¿Cómo va tu semestre?',4,7);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (21,DATE_SUB(DATE_SUB(NOW(),INTERVAL 9 DAY),INTERVAL 357 MINUTE),'Entre clases y proyectos, pero bien. ¿Un café?',4,6);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (22,DATE_SUB(DATE_SUB(NOW(),INTERVAL 8 DAY),INTERVAL 374 MINUTE),'¡Me apunto! Podemos ir a la cafetería.',4,7);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (23,DATE_SUB(DATE_SUB(NOW(),INTERVAL 7 DAY),INTERVAL 391 MINUTE),'Perfecto, lo agendamos como PoliDate.',4,6);
+INSERT INTO MESSAGE (idMessage,sendDate,content,idChat,sender) VALUES (24,DATE_SUB(DATE_SUB(NOW(),INTERVAL 6 DAY),INTERVAL 408 MINUTE),'¡Nos vemos! ☕',4,7);
+INSERT INTO POLIDATE (idPoliDate,place,dateOfPoliDate,idPoliMatch) VALUES (1,'Cafetería de la EPN','2026-02-04 10:30:00',1);
+INSERT INTO POLIDATE (idPoliDate,place,dateOfPoliDate,idPoliMatch) VALUES (2,'Parque La Alameda','2026-04-18 15:45:00',1);
+INSERT INTO POLIDATE (idPoliDate,place,dateOfPoliDate,idPoliMatch) VALUES (3,'Cafetería de la EPN','2026-06-09 08:20:00',2);
+INSERT INTO POLIDATE (idPoliDate,place,dateOfPoliDate,idPoliMatch) VALUES (4,'Parque La Alameda','2026-08-27 17:10:00',2);
+INSERT INTO POLIDATE (idPoliDate,place,dateOfPoliDate,idPoliMatch) VALUES (5,'Cafetería de la EPN','2026-10-13 12:00:00',3);
+INSERT INTO POLIDATE (idPoliDate,place,dateOfPoliDate,idPoliMatch) VALUES (6,'Parque La Alameda','2027-01-06 09:15:00',1);
+INSERT INTO POLIDATE (idPoliDate,place,dateOfPoliDate,idPoliMatch) VALUES (7,'Cafetería de la EPN','2027-02-21 16:40:00',4);
+INSERT INTO POLIDATE (idPoliDate,place,dateOfPoliDate,idPoliMatch) VALUES (8,'Parque La Alameda','2027-03-14 11:05:00',5);
+COMMIT;
