@@ -7,7 +7,7 @@ public final class AuthViews {
   public static final class ConnectionView extends Ui.Screen {
     private final JTextField host, port, user;
     private final JPasswordField password;
-    private final JButton connect, initialize, test;
+    private final JButton connect, initialize, test, expand;
 
     public ConnectionView(AppFrame app) {
       super(app);
@@ -29,14 +29,17 @@ public final class AuthViews {
       connect = Ui.primary("Conectar", () -> execute("connect"));
       initialize = Ui.button("Crear base + datos demo", () -> execute("initialize"));
       test = Ui.button("Probar servidor", () -> execute("test"));
+      expand = Ui.button("Ampliar demo a 30 usuarios", () -> execute("expand"));
       Ui.add(p, connect);
       Ui.add(p, test);
       Ui.add(p, initialize);
+      Ui.add(p, expand);
       Ui.add(
           p,
           Ui.text(
               "La creación inicial solo funciona si no existe la base politinder. También puedes"
-                  + " ejecutar los archivos DDL y DML desde Workbench."));
+                  + " ejecutar los archivos DDL y DML desde Workbench. Si ya tienes la base, usa"
+                  + " Ampliar demo para añadir los perfiles y fotos que faltan."));
       add(Ui.scroll(p), BorderLayout.CENTER);
       password.addActionListener(e -> execute("connect"));
     }
@@ -55,10 +58,12 @@ public final class AuthViews {
       connect.setEnabled(false);
       initialize.setEnabled(false);
       test.setEnabled(false);
+      expand.setEnabled(false);
       task(
           () -> {
             String info = Installer.check(app.db);
             if (mode.equals("initialize")) Installer.initialize(app.db);
+            if (mode.equals("expand")) Installer.expandDemo(app.db);
             if (!mode.equals("test"))
               try (var c = app.db.open()) {
                 Db.number(c, "SELECT COUNT(*) FROM `USER`");
@@ -71,6 +76,7 @@ public final class AuthViews {
             connect.setEnabled(true);
             initialize.setEnabled(true);
             test.setEnabled(true);
+            expand.setEnabled(true);
             if (mode.equals("test")) status.setText(info);
             else app.connected();
           },
@@ -78,6 +84,7 @@ public final class AuthViews {
             connect.setEnabled(true);
             initialize.setEnabled(true);
             test.setEnabled(true);
+            expand.setEnabled(true);
             JOptionPane.showMessageDialog(
                 app, Ui.error(e), "Conexión MySQL", JOptionPane.WARNING_MESSAGE);
           });

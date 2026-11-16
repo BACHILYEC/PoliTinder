@@ -1,0 +1,107 @@
+Fotografías ficticias generadas con la herramienta integrada image_gen y la skill imagegen.
+Se añaden 35 imágenes diferentes y se conservan las 35 anteriores.
+
+02/02.png: Second lifestyle photo of the exact same fictional adult man, dark blue shirt, outdoor Quito cafe, natural smile, realistic skin, waist-up vertical portrait, no text, logos or collage.
+
+11/02.png
+Use case: identity-preserve. Create a SECOND different photo of the same fictional adult person (over 23) from the reference, preserve exact face identity, hair and skin. A different outfit and new natural waist-up pose at a sunny outdoor cafe in Quito, relaxed smile, medium portrait, natural realistic skin, casual smartphone photography. Vertical 2:3 portrait, no collage, text, watermark, logos or avatars.
+
+12/02.png
+Use case: identity-preserve. Create a SECOND different photo of the same fictional adult person (over 23) from the reference, preserve exact face identity, hair and skin. A different outfit and new natural waist-up pose at a leafy Quito park on a walk, relaxed smile, medium portrait, natural realistic skin, casual smartphone photography. Vertical 2:3 portrait, no collage, text, watermark, logos or avatars.
+
+13/02.png
+Use case: identity-preserve. Create a SECOND different photo of the same fictional adult person (over 23) from the reference, preserve exact face identity, hair and skin. A different outfit and new natural waist-up pose at a sunny outdoor cafe in Quito, relaxed smile, medium portrait, natural realistic skin, casual smartphone photography. Vertical 2:3 portrait, no collage, text, watermark, logos or avatars.
+
+14/02.png
+Use case: identity-preserve. Create a SECOND different photo of the same fictional adult person (over 23) from the reference, preserve exact face identity, hair and skin. A different outfit and new natural waist-up pose at a leafy Quito park on a walk, relaxed smile, medium portrait, natural realistic skin, casual smartphone photography. Vertical 2:3 portrait, no collage, text, watermark, logos or avatars.
+
+15/02.png
+Use case: identity-preserve. Create a SECOND different photo of the same fictional adult person (over 23) from the reference, preserve exact face identity, hair and skin. A different outfit and new natural waist-up pose at a sunny outdoor cafe in Quito, relaxed smile, medium portrait, natural realistic skin, casual smartphone photography. Vertical 2:3 portrait, no collage, text, watermark, logos or avatars.
+
+16/02.png
+Use case: identity-preserve. Create a SECOND different photo of the same fictional adult person (over 23) from the reference, preserve exact face identity, hair and skin. A different outfit and new natural waist-up pose at a leafy Quito park on a walk, relaxed smile, medium portrait, natural realistic skin, casual smartphone photography. Vertical 2:3 portrait, no collage, text, watermark, logos or avatars.
+
+17/02.png
+Use case: identity-preserve. Create a SECOND different photo of the same fictional adult person (over 23) from the reference, preserve exact face identity, hair and skin. A different outfit and new natural waist-up pose at a sunny outdoor cafe in Quito, relaxed smile, medium portrait, natural realistic skin, casual smartphone photography. Vertical 2:3 portrait, no collage, text, watermark, logos or avatars.
+
+18/02.png
+Use case: identity-preserve. Create a SECOND different photo of the same fictional adult person (over 23) from the reference, preserve exact face identity, hair and skin. A different outfit and new natural waist-up pose at a leafy Quito park on a walk, relaxed smile, medium portrait, natural realistic skin, casual smartphone photography. Vertical 2:3 portrait, no collage, text, watermark, logos or avatars.
+
+19/02.png
+Use case: identity-preserve. Create a SECOND different photo of the same fictional adult person (over 23) from the reference, preserve exact face identity, hair and skin. A different outfit and new natural waist-up pose at a sunny outdoor cafe in Quito, relaxed smile, medium portrait, natural realistic skin, casual smartphone photography. Vertical 2:3 portrait, no collage, text, watermark, logos or avatars.
+
+20/02.png
+Use case: identity-preserve. Create a SECOND different photo of the same fictional adult person (over 23) from the reference, preserve exact face identity, hair and skin. A different outfit and new natural waist-up pose at a leafy Quito park on a walk, relaxed smile, medium portrait, natural realistic skin, casual smartphone photography. Vertical 2:3 portrait, no collage, text, watermark, logos or avatars.
+
+21/01.png
+Use case: photorealistic-natural. One fictional Ecuadorian adult aged 25, woman, Afro Ecuadorian, short natural curly hair, cheerful, round glasses, yellow blouse. A casual authentic dating app photo, medium waist-up portrait at a botanical garden in Quito, natural smile and daylight, realistic skin texture, ordinary smartphone aesthetic. Fully clothed. Vertical 2:3 portrait, no text, logos, watermarks, collage or avatars. Distinct individual face.
+
+21/02.png
+Use case: identity-preserve. SECOND profile photo of the same fictional adult person from the reference. Preserve exact face identity, hair and skin. New outfit: casual light blue blouse, new medium waist-up pose at a leafy Quito park, natural smile, candid smartphone photography, realistic skin. Fully clothed. Vertical 2:3 portrait. No text, watermark, logos, collage or avatars.
+
+22/01.png
+Use case: photorealistic-natural. One fictional Ecuadorian adult aged 25, man, mestizo Ecuadorian, shoulder length straight black hair, slim, denim jacket. A casual authentic dating app photo, medium waist-up portrait at a old town stone plaza in Quito, natural smile and daylight, realistic skin texture, ordinary smartphone aesthetic. Fully clothed. Vertical 2:3 portrait, no text, logos, watermarks, collage or avatars. Distinct individual face.
+
+22/02.png
+Use case: identity-preserve. SECOND profile photo of the same fictional adult person from the reference. Preserve exact face identity, hair and skin. New outfit: dark green casual shirt, new medium waist-up pose at a sunny outdoor cafe in Quito, natural smile, candid smartphone photography, realistic skin. Fully clothed. Vertical 2:3 portrait. No text, watermark, logos, collage or avatars.
+
+23/01.png
+Use case: photorealistic-natural. One fictional Ecuadorian adult aged 25, woman, light brown skin, black braided hair, red cardigan, oval face. A casual authentic dating app photo, medium waist-up portrait at a bookshop in Quito, natural smile and daylight, realistic skin texture, ordinary smartphone aesthetic. Fully clothed. Vertical 2:3 portrait, no text, logos, watermarks, collage or avatars. Distinct individual face.
+
+23/02.png
+Use case: identity-preserve. SECOND profile photo of the same fictional adult person from the reference. Preserve exact face identity, hair and skin. New outfit: casual light blue blouse, new medium waist-up pose at a leafy Quito park, natural smile, candid smartphone photography, realistic skin. Fully clothed. Vertical 2:3 portrait. No text, watermark, logos, collage or avatars.
+
+24/01.png
+Use case: photorealistic-natural. One fictional Ecuadorian adult aged 25, man, dark brown skin, shaved head, short beard, olive shirt. A casual authentic dating app photo, medium waist-up portrait at a urban park in Quito, natural smile and daylight, realistic skin texture, ordinary smartphone aesthetic. Fully clothed. Vertical 2:3 portrait, no text, logos, watermarks, collage or avatars. Distinct individual face.
+
+24/02.png
+Use case: identity-preserve. SECOND profile photo of the same fictional adult person from the reference. Preserve exact face identity, hair and skin. New outfit: dark green casual shirt, new medium waist-up pose at a sunny outdoor cafe in Quito, natural smile, candid smartphone photography, realistic skin. Fully clothed. Vertical 2:3 portrait. No text, watermark, logos, collage or avatars.
+
+25/01.png
+Use case: photorealistic-natural. One fictional Ecuadorian adult aged 25, woman, olive skin, short dark pixie haircut, blue blouse. A casual authentic dating app photo, medium waist-up portrait at a mountain overlook in Quito, natural smile and daylight, realistic skin texture, ordinary smartphone aesthetic. Fully clothed. Vertical 2:3 portrait, no text, logos, watermarks, collage or avatars. Distinct individual face.
+
+25/02.png
+Use case: identity-preserve. SECOND profile photo of the same fictional adult person from the reference. Preserve exact face identity, hair and skin. New outfit: casual light blue blouse, new medium waist-up pose at a leafy Quito park, natural smile, candid smartphone photography, realistic skin. Fully clothed. Vertical 2:3 portrait. No text, watermark, logos, collage or avatars.
+
+26/01.png
+Use case: photorealistic-natural. One fictional Ecuadorian adult aged 25, man, light skin, straight auburn hair, freckles, thin glasses, green sweater. A casual authentic dating app photo, medium waist-up portrait at a university courtyard in Quito, natural smile and daylight, realistic skin texture, ordinary smartphone aesthetic. Fully clothed. Vertical 2:3 portrait, no text, logos, watermarks, collage or avatars. Distinct individual face.
+
+26/02.png
+Use case: identity-preserve. SECOND profile photo of the same fictional adult person from the reference. Preserve exact face identity, hair and skin. New outfit: dark green casual shirt, new medium waist-up pose at a sunny outdoor cafe in Quito, natural smile, candid smartphone photography, realistic skin. Fully clothed. Vertical 2:3 portrait. No text, watermark, logos, collage or avatars.
+
+27/01.png
+Use case: photorealistic-natural. One fictional Ecuadorian adult aged 25, woman, tan skin, long straight black hair, white shirt, dimpled smile. A casual authentic dating app photo, medium waist-up portrait at a quiet outdoor cafe in Quito, natural smile and daylight, realistic skin texture, ordinary smartphone aesthetic. Fully clothed. Vertical 2:3 portrait, no text, logos, watermarks, collage or avatars. Distinct individual face.
+
+27/02.png
+Use case: identity-preserve. SECOND profile photo of the same fictional adult person from the reference. Preserve exact face identity, hair and skin. New outfit: casual light blue blouse, new medium waist-up pose at a leafy Quito park, natural smile, candid smartphone photography, realistic skin. Fully clothed. Vertical 2:3 portrait. No text, watermark, logos, collage or avatars.
+
+28/01.png
+Use case: photorealistic-natural. One fictional Ecuadorian adult aged 25, man, medium brown skin, tight curls, clean shaven, burgundy polo shirt. A casual authentic dating app photo, medium waist-up portrait at a tree lined walkway in Quito, natural smile and daylight, realistic skin texture, ordinary smartphone aesthetic. Fully clothed. Vertical 2:3 portrait, no text, logos, watermarks, collage or avatars. Distinct individual face.
+
+28/02.png
+Use case: identity-preserve. SECOND profile photo of the same fictional adult person from the reference. Preserve exact face identity, hair and skin. New outfit: dark green casual shirt, new medium waist-up pose at a sunny outdoor cafe in Quito, natural smile, candid smartphone photography, realistic skin. Fully clothed. Vertical 2:3 portrait. No text, watermark, logos, collage or avatars.
+
+29/01.png
+Use case: photorealistic-natural. One fictional Ecuadorian adult aged 25, woman, light skin, chin length wavy black bob, round face, green blouse. A casual authentic dating app photo, medium waist-up portrait at a arts courtyard in Quito, natural smile and daylight, realistic skin texture, ordinary smartphone aesthetic. Fully clothed. Vertical 2:3 portrait, no text, logos, watermarks, collage or avatars. Distinct individual face.
+
+29/02.png
+Use case: identity-preserve. SECOND profile photo of the same fictional adult person from the reference. Preserve exact face identity, hair and skin. New outfit: casual light blue blouse, new medium waist-up pose at a leafy Quito park, natural smile, candid smartphone photography, realistic skin. Fully clothed. Vertical 2:3 portrait. No text, watermark, logos, collage or avatars.
+
+03/02.png
+Use case: identity-preserve. Create a SECOND different photo of the same fictional adult person (over 23) from the reference, preserve exact face identity, hair and skin. A different outfit and new natural waist-up pose at a sunny outdoor cafe in Quito, relaxed smile, medium portrait, natural realistic skin, casual smartphone photography. Vertical 2:3 portrait, no collage, text, watermark, logos or avatars.
+
+30/01.png
+Use case: photorealistic-natural. One fictional Ecuadorian adult aged 25, man, tan skin, short dark straight hair, square face, light stubble, cream sweater. A casual authentic dating app photo, medium waist-up portrait at a city terrace in Quito, natural smile and daylight, realistic skin texture, ordinary smartphone aesthetic. Fully clothed. Vertical 2:3 portrait, no text, logos, watermarks, collage or avatars. Distinct individual face.
+
+30/02.png
+Use case: identity-preserve. SECOND profile photo of the same fictional adult person from the reference. Preserve exact face identity, hair and skin. New outfit: dark green casual shirt, new medium waist-up pose at a sunny outdoor cafe in Quito, natural smile, candid smartphone photography, realistic skin. Fully clothed. Vertical 2:3 portrait. No text, watermark, logos, collage or avatars.
+
+06/02.png
+Use case: identity-preserve. Create a SECOND different photo of the same fictional adult person (over 23) from the reference, preserve exact face identity, hair and skin. A different outfit and new natural waist-up pose at a leafy Quito park on a walk, relaxed smile, medium portrait, natural realistic skin, casual smartphone photography. Vertical 2:3 portrait, no collage, text, watermark, logos or avatars.
+
+08/02.png
+Use case: identity-preserve. Create a SECOND different photo of the same fictional adult person (over 23) from the reference, preserve exact face identity, hair and skin. A different outfit and new natural waist-up pose at a leafy Quito park on a walk, relaxed smile, medium portrait, natural realistic skin, casual smartphone photography. Vertical 2:3 portrait, no collage, text, watermark, logos or avatars.
+
+09/02.png
+Use case: identity-preserve. Create a SECOND different photo of the same fictional adult person (over 23) from the reference, preserve exact face identity, hair and skin. A different outfit and new natural waist-up pose at a sunny outdoor cafe in Quito, relaxed smile, medium portrait, natural realistic skin, casual smartphone photography. Vertical 2:3 portrait, no collage, text, watermark, logos or avatars.
+

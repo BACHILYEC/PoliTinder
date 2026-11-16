@@ -69,4 +69,20 @@ public final class Installer {
       }
     }
   }
+
+  /** Ampliación explícita y repetible; conserva cuentas, claves y conversaciones existentes. */
+  public static void expandDemo(Db db) throws Exception {
+    // Verificar los archivos antes de insertar rutas en la base.
+    for (var profile : DemoProfiles.PROFILES)
+      for (int n = 1; n <= 2; n++)
+        if (!Files.isRegularFile(AppConfig.resolve(profile.photo(n))))
+          throw new IllegalStateException("Falta la fotografía " + profile.photo(n));
+    db.tx(c -> {
+      for (String sql : SqlScripts.split(Files.readString(AppConfig.ROOT.resolve("sql/04_ampliar_demo.sql")))) {
+        if (sql.equalsIgnoreCase("START TRANSACTION") || sql.equalsIgnoreCase("COMMIT")) continue;
+        try (var st = c.createStatement()) { st.execute(sql); }
+      }
+      return null;
+    });
+  }
 }

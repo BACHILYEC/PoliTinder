@@ -6,7 +6,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.regex.*;
 
-/** Una sola fuente SQL para los reportes y el TXT de exposición. */
+/** Una sola fuente SQL para los reportes y el archivo .sql de exposición. */
 public final class Reports {
   public record Report(int id, String title, String explanation, String sql) {
     public String toString() {
@@ -20,7 +20,7 @@ public final class Reports {
     String title = "";
     var sql = new StringBuilder();
     var notes = new StringBuilder();
-    for (String line : Files.readAllLines(AppConfig.ROOT.resolve("sql/03_consultas_exposicion.txt"))) {
+    for (String line : Files.readAllLines(AppConfig.ROOT.resolve("sql/03_reportes.sql"))) {
       if (line.startsWith("-- @report ")) {
         var parts = line.substring(11).split("\\|", 2);
         id = Integer.parseInt(parts[0].strip());
@@ -38,7 +38,7 @@ public final class Reports {
       }
     }
     if (result.size() != 9)
-      throw new IllegalStateException("El TXT debe contener nueve reportes.");
+      throw new IllegalStateException("El SQL debe contener nueve reportes.");
     return result;
   }
 

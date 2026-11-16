@@ -10,15 +10,15 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public final class Ui {
-  public static final Color CORAL = new Color(217, 37, 85),
+  public static final Color CORAL = new Color(216, 27, 96),
       INK = new Color(32, 38, 62),
       MUTED = new Color(97, 105, 124),
-      BG = new Color(245, 246, 250),
+      BG = new Color(255, 245, 250),
       SURFACE = Color.WHITE,
       LINE = new Color(221, 226, 236),
-      SOFT = new Color(252, 232, 237),
-      NAVY = new Color(37, 43, 72),
-      TEAL = new Color(20, 110, 104);
+      SOFT = new Color(253, 224, 239),
+      NAVY = new Color(72, 33, 143),
+      TEAL = new Color(0, 119, 106);
   public static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
   public static void installTheme() {
@@ -168,7 +168,7 @@ public final class Ui {
     b.setForeground(Color.WHITE);
     b.putClientProperty("JButton.buttonType", "roundRect");
     b.putClientProperty("FlatLaf.style",
-        "hoverBackground: #C41E4A; pressedBackground: #A91C41; focusedBackground: #D92555");
+        "hoverBackground: #B71550; pressedBackground: #941342; focusedBackground: #D81B60");
     return b;
   }
 
@@ -210,8 +210,8 @@ public final class Ui {
   }
 
   public static Rectangle bounds(Rectangle available) {
-    int h = (int) (available.height * .85);
-    int w = Math.min((int) (h * .65), (int) (available.width * .9));
+    int h = (int) (available.height * .92);
+    int w = Math.min((int) (h * .72), (int) (available.width * .94));
     return new Rectangle(
         available.x + (available.width - w) / 2, available.y + (available.height - h) / 2, w, h);
   }
@@ -237,12 +237,36 @@ public final class Ui {
     private BufferedImage picture;
     private int generation;
     private boolean loading;
+    private float opacity = 1f;
+    private Timer animation;
+
+    private void reveal() {
+      if (animation != null) animation.stop();
+      if (!isDisplayable()) { opacity = 1f; return; }
+      opacity = 0f;
+      long start = System.nanoTime();
+      animation = new Timer(16, e -> {
+        float t = Math.min(1f, (System.nanoTime() - start) / 220_000_000f);
+        opacity = 1f - (1f - t) * (1f - t);
+        repaint();
+        if (t == 1f) ((Timer) e.getSource()).stop();
+      });
+      animation.start();
+    }
+
+    @Override public void removeNotify() {
+      if (animation != null) animation.stop();
+      opacity = 1f;
+      super.removeNotify();
+    }
 
     public Portrait() {
       setPreferredSize(new Dimension(300, 330));
     }
 
     public void load(String path) {
+      if (animation != null) animation.stop();
+      opacity = 1f;
       picture = null;
       loading = path != null;
       repaint();
@@ -259,6 +283,7 @@ public final class Ui {
             if (generation == ticket) {
               picture = get();
               loading = false;
+              reveal();
               repaint();
             }
           } catch (Exception ignored) {
@@ -281,6 +306,7 @@ public final class Ui {
       g.fillRoundRect(0, 0, getWidth(), getHeight(), 24, 24);
       g.clip(new java.awt.geom.RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 24, 24));
       if (picture != null) {
+        g.setComposite(AlphaComposite.SrcOver.derive(opacity));
         double r = Math.max(
             (double) getWidth() / picture.getWidth(),
             (double) getHeight() / picture.getHeight());
@@ -305,6 +331,8 @@ public final class Ui {
     protected final JLabel status = new JLabel(" ");
     protected boolean active = true;
     private int epoch = 0;
+    private float progress = 1f;
+    private Timer transition;
 
     public Screen(AppFrame app) {
       super(new BorderLayout(0, 10));
@@ -317,11 +345,31 @@ public final class Ui {
 
     public void onShow() {
       active = true;
+      if (transition != null) transition.stop();
+      progress = 0f;
+      long start = System.nanoTime();
+      transition = new Timer(16, e -> {
+        float t = Math.min(1f, (System.nanoTime() - start) / 180_000_000f);
+        progress = 1f - (1f - t) * (1f - t);
+        repaint();
+        if (t == 1f) ((Timer) e.getSource()).stop();
+      });
+      transition.start();
     }
 
     public void onHide() {
       active = false;
       epoch++;
+      if (transition != null) transition.stop();
+      progress = 1f;
+    }
+
+    @Override protected void paintChildren(Graphics graphics) {
+      var g = (Graphics2D) graphics.create();
+      g.setComposite(AlphaComposite.SrcOver.derive(progress));
+      g.translate(0, Math.round(10 * (1f - progress)));
+      super.paintChildren(g);
+      g.dispose();
     }
 
     public <T> void task(Callable<T> job, Consumer<T> success) {

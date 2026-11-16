@@ -1,5 +1,5 @@
 -- PoliTinder · nueve SELECT para exposición y pantalla Reportes.
--- Este archivo es SQL ejecutable en Workbench aunque tenga extensión .txt.
+-- Archivo SQL ejecutable en Workbench y fuente de la sección Reportes de la app.
 -- La app lee los bloques @report y sustituye variables por parámetros JDBC.
 USE politinder;
 SET @edad_min=18;

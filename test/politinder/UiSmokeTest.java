@@ -21,7 +21,7 @@ public class UiSmokeTest {
         () -> {
           Ui.installTheme();
           app = new AppFrame();
-          app.setBounds(50, 50, 430, 760);
+          Ui.position(app);
           app.addNotify();
           app.validate();
         });

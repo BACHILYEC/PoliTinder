@@ -27,16 +27,24 @@ public final class AppFrame extends JFrame {
   public AppFrame() {
     super("PoliTinder · EPN");
     setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-    var head = new JPanel(new BorderLayout(12, 0));
+    var head = new JPanel(new BorderLayout(12, 0)) {
+      @Override protected void paintComponent(Graphics graphics) {
+        super.paintComponent(graphics);
+        var g = (Graphics2D) graphics.create();
+        g.setPaint(new GradientPaint(0, 0, Ui.NAVY, getWidth(), getHeight(), Ui.CORAL));
+        g.fillRect(0, 0, getWidth(), getHeight());
+        g.dispose();
+      }
+    };
     head.setBackground(Ui.NAVY);
     head.setBorder(new EmptyBorder(13, 20, 13, 20));
     var mark = Ui.label("PoliTinder", 24, true);
     mark.setForeground(Color.WHITE);
-    section.setForeground(new Color(246, 201, 212));
-    menu.setBackground(new Color(55, 63, 94));
+    section.setForeground(Color.WHITE);
+    menu.setBackground(new Color(87, 31, 131));
     menu.setForeground(Color.WHITE);
     menu.putClientProperty("FlatLaf.style",
-        "hoverBackground: #48516E; pressedBackground: #555E7D; borderWidth: 0");
+        "hoverBackground: #712CA0; pressedBackground: #471966; borderWidth: 0");
     menu.setToolTipText("Abrir menú");
     var brand = new JPanel(new BorderLayout(0, 3));
     brand.setOpaque(false);

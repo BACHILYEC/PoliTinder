@@ -62,7 +62,7 @@ public class TestSuite {
               && Math.abs(w.getCenterY() - r.getCenterY()) <= 1,
           "Ventana vertical centrada " + r.width + "×" + r.height);
     }
-    check(Reports.load().size() == 9, "Nueve reportes cargados desde el TXT");
+    check(Reports.load().size() == 9, "Nueve reportes cargados desde SQL");
     if (Arrays.asList(args).contains("--db")) integration();
     System.out.println("TOTAL: " + passed + " verificaciones correctas.");
   }
@@ -93,8 +93,8 @@ public class TestSuite {
                   "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='politinder'")
               == 10,
           "DDL crea exactamente diez tablas");
-      check(Db.number(c, "SELECT COUNT(*) FROM `USER`") == 20, "20 usuarios demo");
-      check(Db.number(c, "SELECT COUNT(*) FROM USERPHOTO") == 35, "35 fotos realistas demo");
+      check(Db.number(c, "SELECT COUNT(*) FROM `USER`") == 30, "30 usuarios demo");
+      check(Db.number(c, "SELECT COUNT(*) FROM USERPHOTO") == 70, "70 fotos realistas demo");
       check(Db.number(c, "SELECT COUNT(*) FROM `LIKE`") == 16, "16 likes demo");
       check(Db.number(c, "SELECT COUNT(*) FROM MESSAGE") == 24, "24 mensajes demo");
       rejects(

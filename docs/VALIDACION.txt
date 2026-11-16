@@ -1,0 +1,46 @@
+POLITINDER - VALIDACIÓN DEL 14 DE NOVIEMBRE DE 2026
+
+Entorno: Java 25 y MySQL 8.0.46, InnoDB y utf8mb4.
+Las pruebas se ejecutaron en una instancia aislada en localhost:33307,
+con directorio de datos separado del MySQL habitual del usuario.
+
+RESULTADOS
+- Compilación completa de todos los fuentes Java 25, sin errores.
+- 165 verificaciones de lógica e integración correctas.
+- 143 verificaciones adicionales de catálogo y ampliación correctas.
+- DDL: diez tablas del ER, con columnas, claves e índices compatibles.
+- DML inicial: 30 usuarios, 70 fotografías, 16 likes, 6 matches,
+  6 chats, 24 mensajes y 8 PoliDates.
+- Hashes de las 30 cuentas compatibles con la contraseña demo PoliDemo25!.
+- Todas las fotografías se pueden decodificar y todas las rutas existen.
+- Ampliación probada desde el DML anterior de 20 usuarios y 35 fotos.
+- Probada con una cuenta personal ocupando el ID 21: el resultado tiene
+  30 cuentas demo más la personal, sin confundir propietarios de fotos.
+- Al menos dos fotos y exactamente una principal por cuenta demo.
+- Ejecutar de nuevo la ampliación no duplica usuarios ni fotos.
+- Conserva contraseñas, cuentas personales, mensajes y matches existentes.
+- Likes recíprocos y remitentes de mensajes coherentes con sus chats.
+- Los nueve reportes ejecutan desde Java y como archivo SQL independiente.
+- La UI recorre tres ciclos de Descubrir sin repeticiones inmediatas y sin
+  mostrar matches. Se revisaron pantallas normal, pequeña y ampliada.
+- Se mantienen las restricciones de horario por participante y las
+  comprobaciones de concurrencia de likes, fotos y citas.
+- La copia del ER tiene el mismo SHA-256 que la imagen original suministrada.
+
+ALCANCE RESPECTO A TU MYSQL PRINCIPAL
+No se pudo autenticar contra localhost:3306 sin su contraseña MySQL.
+No se ha consultado ni modificado esa base durante esta validación, ni se
+puede afirmar que su esquema real no haya sido editado manualmente.
+Los scripts se validaron contra una base creada desde el DDL del proyecto.
+
+Para aplicar a tu base existente, usa 'Ampliar demo a 30 usuarios' en la app
+con tu contraseña MySQL o ejecuta sql/04_ampliar_demo.sql desde Workbench.
+No ejecutes el DDL de creación ni el DML inicial sobre la base poblada.
+Las cuentas personales fuera del catálogo demo mantienen sus fotografías;
+si tienen menos de dos, añádelas desde Mi perfil.
+
+No se añadieron tablas ni columnas al ER. Las reglas de reciprocidad,
+pertenencia a un chat y conflictos de agenda siguen validándose en Java.
+
+ESTADO POSTERIOR: el usuario confirmó en el chat que 'Ampliar demo a 30 usuarios' terminó correctamente en su MySQL principal. Esta confirmación es del usuario; no se realizó una inspección directa adicional del esquema de ese servidor.
+

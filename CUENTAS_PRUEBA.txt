@@ -1,0 +1,31 @@
+POLITINDER - SEIS CUENTAS PARA PROBAR
+
+Contraseña inicial de todas las cuentas demo: PoliDemo25!
+Se distingue entre mayúsculas y minúsculas. El signo ! forma parte de la clave.
+Esta es la contraseña de PoliTinder, no la del usuario root de MySQL.
+
+1. Ana Lucía Cárdenas       | ana@politinder.test       | PoliDemo25!
+2. Luis Andrés Benavides    | luis@politinder.test      | PoliDemo25!
+3. Sofía Isabel Montalvo    | sofia@politinder.test     | PoliDemo25!
+4. Mateo Alejandro Jaramillo | mateo@politinder.test   | PoliDemo25!
+5. Valentina Paz Cevallos   | valentina@politinder.test | PoliDemo25!
+6. Camila Fernanda Caicedo  | camila@politinder.test    | PoliDemo25!
+
+Pruebas sugeridas con el DML inicial:
+- Ana tiene matches y chats con Luis y Sofía.
+- Mateo y Valentina tienen un match y un chat.
+- Camila tiene un match con Diego.
+- En Descubrir no aparecen los matches actuales. Las personas disponibles se
+  recorren en orden aleatorio y el ciclo vuelve a comenzar cuando se termina.
+- Cambia de cuenta para responder mensajes: cada mensaje conserva su emisor.
+- Programa una PoliDate. Si alguno de sus participantes tiene otra cita en ese
+  mismo minuto, la app rechaza la nueva. Otras parejas sí pueden usar ese horario.
+- Revisa Reportes y compara con sql/03_reportes.sql en Workbench.
+
+Para una base nueva: ejecutar sql/01_ddl.sql y después sql/02_dml.sql, una vez.
+Para una base existente: ejecutar sql/04_ampliar_demo.sql con la app cerrada,
+o usar 'Ampliar demo a 30 usuarios' en la pantalla de conexión.
+La ampliación conserva contraseñas y datos existentes. Si cambiaste una clave,
+esa cuenta conserva tu contraseña; la ampliación no la restablece.
+
+Los nombres, biografías, mensajes y fotografías son datos ficticios de prueba.
