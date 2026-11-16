@@ -1,17 +1,16 @@
-POLITINDER - PRESENTACIÓN EN CANVA
+PoliTinder - Presentación del proyecto
+Actualizada: 15 de noviembre de 2026
+10 diapositivas
 
-Presentación editable de 8 diapositivas:
-https://www.canva.com/d/_YBMllTpS1f5Obr
+Editar en Canva:
+https://www.canva.com/d/6aK2fd7SHh-CrYX
 
-Contenido:
-1. Objetivo de PoliTinder.
-2. Java 25, Swing, FlatLaf, JDBC y MySQL.
-3. ER original de diez tablas.
-4. Relaciones y cardinalidades.
-5. Dos likes recíprocos, match y chat.
-6. Capturas reales de Descubrir, Chats y PoliDates.
-7. Reportes y consola SQL.
-8. Datos demo, archivos del proyecto y reglas principales.
+Ver la presentación:
+https://www.canva.com/d/V3XBASxCbfhH6xB
 
-La presentación contiene notas para explicar el proyecto.
-El ZIP adjunto conserva el HTML y las imágenes usados para importarla.
+Contenido: actividad de la organización ficticia, tecnologías, ER y entidades,
+relaciones, likes y matches, interfaz, reportes y consola SQL, explicación de
+los nueve SELECT solicitados y datos de prueba.
+
+La diapositiva final muestra interacciones de prueba y reglas de la aplicación.
+Se eliminó la descripción de archivos del proyecto.
